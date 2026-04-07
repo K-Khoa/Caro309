@@ -14,7 +14,6 @@ PATTERNS = {
     (2,2): 500,        (2,1): 100,
 }
 
-
 def _line_score(r: int, c: int, dr: int, dc: int, player: str) -> int:
     count, open_ends = 1, 0
     for sign in (1, -1):
@@ -113,7 +112,11 @@ def _minimax(depth: int, maximizing: bool, alpha: float, beta: float) -> tuple[f
         return best, best_move
 
 def ai_move(level: str) -> tuple[int,int]:
-    """Trả về (row, col) tốt nhất cho máy (O) theo level."""
+    """Trả về (row, col) tốt nhất cho máy (O) theo level.
+    Easy:   3 bước nhìn trước
+    Medium: 4 bước nhìn trước
+    Hard:   5 bước nhìn trước
+    """
     win = _immediate_win("O")
     if win:
         return win
@@ -125,10 +128,11 @@ def ai_move(level: str) -> tuple[int,int]:
     cands = candidate_moves()
 
     if level == "Easy":
-        return random.choice(cands[:max(1, min(5, len(cands)))])
+        _, move = _minimax(3, True, -math.inf, math.inf)
+        return move or cands[0]
     elif level == "Medium":
-        _, move = _minimax(1, True, -math.inf, math.inf)
+        _, move = _minimax(4, True, -math.inf, math.inf)
         return move or cands[0]
     else:  # Hard
-        _, move = _minimax(DEPTH, True, -math.inf, math.inf)
+        _, move = _minimax(5, True, -math.inf, math.inf)
         return move or cands[0]
