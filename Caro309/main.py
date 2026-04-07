@@ -1,7 +1,3 @@
-"""
-caro309 — Backend
-FastAPI + WebSocket + SQLite + JWT
-"""
 import os, sys, json, uuid, time, hashlib, hmac, base64, sqlite3, asyncio
 from typing import Optional
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException, Depends
@@ -137,10 +133,21 @@ def me(user=Depends(get_user)):
 def leaderboard():
     db = get_db()
     rows = db.execute(
-        "SELECT username,elo,wins,losses,draws FROM users ORDER BY elo DESC LIMIT 20"
+        "SELECT username,elo,wins,losses,draws,created FROM users ORDER BY elo DESC LIMIT 20"
     ).fetchall()
     db.close()
-    return [dict(r) for r in rows]
+    result = []
+    for r in rows:
+        d = dict(r)
+        ts = d.get("created", 0)
+        if ts:
+            import datetime
+            dt = datetime.datetime.fromtimestamp(ts)
+            d["joined"] = dt.strftime("%d/%m/%Y")
+        else:
+            d["joined"] = "—"
+        result.append(d)
+    return result
 
 class NewGame(BaseModel):
     size: int = 15
@@ -150,6 +157,26 @@ class MoveIn(BaseModel):
     col:   int
     board: list
     level: str = "Hard"
+    token: str = "" 
+def _update_ai_stats(token: str, won: bool):
+    """Cập nhật wins/losses khi chơi vs AI (không tính ELO)."""
+    if not token:
+        return
+    payload = check_token(token)
+    if not payload:
+        return
+    uid = payload.get("sub", "")
+    if not uid:
+        return
+    try:
+        db = get_db()
+        if won:
+            db.execute("UPDATE users SET wins=wins+1 WHERE id=?", (uid,))
+        else:
+            db.execute("UPDATE users SET losses=losses+1 WHERE id=?", (uid,))
+        db.commit(); db.close()
+    except Exception as e:
+        print("Stats update error:", e)
 
 @app.post("/new_game")
 def new_game(body: NewGame):
@@ -161,6 +188,7 @@ def new_game(body: NewGame):
 def do_move(body: MoveIn):
     r, c = body.row, body.col
 
+    # --- Validate và normalize board từ frontend ---
     if not body.board or not isinstance(body.board, list):
         raise HTTPException(400, "Board không hợp lệ")
 
@@ -168,6 +196,7 @@ def do_move(body: MoveIn):
     if not (10 <= size <= 20):
         raise HTTPException(400, f"Kích thước board không hợp lệ: {size}")
 
+    # Normalize: chỉ giữ "" / "X" / "O"
     clean = []
     for row in body.board:
         if not isinstance(row, list) or len(row) != size:
@@ -180,18 +209,21 @@ def do_move(body: MoveIn):
     if not (0 <= r < size and 0 <= c < size):
         raise HTTPException(400, f"Tọa độ ({r},{c}) ngoài bàn {size}×{size}")
 
-
     if Board.board[r][c] == "":
         Board.board[r][c] = "X"
     elif Board.board[r][c] != "X":
         raise HTTPException(400, f"Ô ({r},{c}) đã có quân '{Board.board[r][c]}'")
     if Board.check_winner("X", r, c):
+        _update_ai_stats(body.token, won=True)
         return {"board": Board.board, "winner": "X", "ai_move": None, "candidates": []}
 
     cands     = AI.candidate_moves()
     ar, ac    = AI.ai_move(body.level)
     Board.board[ar][ac] = "O"
     winner = "O" if Board.check_winner("O", ar, ac) else None
+
+    if winner == "O":
+        _update_ai_stats(body.token, won=False)
 
     return {
         "board":      Board.board,
@@ -252,16 +284,25 @@ class Rooms:
         if not room:
             return
         username, role = "", None
+        players_snapshot = {k: dict(v) for k, v in room["players"].items()
+                           if k != "ws"}
         for sym, info in list(room["players"].items()):
             if info["ws"] is ws:
                 username, role = info["username"], sym
-                del room["players"][sym]
                 break
-        room["spectators"] = [s for s in room["spectators"] if s["ws"] is not ws]
+
         if role and room["status"] == "playing":
             room["status"] = "ended"
             room["winner"] = "O" if role == "X" else "X"
             _elo_update(room, room["winner"])
+
+        for sym, info in list(room["players"].items()):
+            if info["ws"] is ws:
+                del room["players"][sym]
+                break
+        room["spectators"] = [s for s in room["spectators"] if s["ws"] is not ws]
+
+        if role and room.get("winner"):
             await self.broadcast(rid, {
                 "type":    "player_left",
                 "username": username,
@@ -376,9 +417,17 @@ async def ws_endpoint(ws: WebSocket, rid: str, token: str = ""):
 
     try:
         while True:
-            data = await ws.receive_json()
+            try:
+                data = await asyncio.wait_for(ws.receive_json(), timeout=60.0)
+            except asyncio.TimeoutError:
+                try:
+                    await ws.send_json({"type": "ping"})
+                except Exception:
+                    break  
+                continue
             t = data.get("type")
-
+            if t == "pong":
+                continue  
             if t == "move":
                 if role not in ("X", "O"):
                     await ws.send_json({"type": "error", "msg": "Khán giả không thể đi"}); continue
@@ -395,7 +444,7 @@ async def ws_endpoint(ws: WebSocket, rid: str, token: str = ""):
                 room["board"][r2][c2] = role
                 room["moves"] += 1
 
-                Board.board = [row[:] for row in room["board"]]
+                Board.board = [r[:] for r in room["board"]]
                 Board.SIZE  = room["size"]
                 won = Board.check_winner(role, r2, c2)
 
