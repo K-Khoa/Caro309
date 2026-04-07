@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Caro309 — Cờ Năm Mạch</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════
+   RESET & TOKENS
+═══════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#07090f; --s1:#0d1120; --s2:#111828; --s3:#17203a; --s4:#1d2640;
+  --bd:rgba(255,255,255,.07); --bd2:rgba(255,255,255,.12); --bd3:rgba(255,255,255,.2);
+  --blue:#4f8ef7; --blue2:#3a7aef; --green:#1fd98a; --red:#f75a5a;
+  --amber:#f5a623; --gold:#f5c842; --purple:#7c6cff;
+  --t1:#edf0ff; --t2:#8592bb; --t3:#475070; --t4:#232840;
+  --r:10px; --r2:14px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t1);font-family:'Outfit',sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(ellipse 55% 35% at 15% 8%,rgba(79,142,247,.08) 0%,transparent 60%),
+             radial-gradient(ellipse 45% 30% at 85% 92%,rgba(124,108,255,.07) 0%,transparent 60%)}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
+
+/* ═══════════════════════════
+   NAV
+═══════════════════════════ */
+nav{
+  position:sticky;top:0;z-index:200;height:54px;
+  background:rgba(7,9,15,.93);backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;padding:0 18px;
+}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;
+  color:var(--blue);cursor:pointer;display:flex;align-items:center;gap:5px}
+.logo-sub{font-family:'Outfit',sans-serif;font-size:10px;color:var(--t3);font-weight:400;margin-top:5px}
+.nav-r{display:flex;gap:2px;align-items:center}
+.nb{padding:6px 12px;border-radius:8px;font-size:12px;font-weight:500;color:var(--t2);
+  cursor:pointer;border:none;background:none;transition:all .15s;font-family:'Outfit',sans-serif}
+.nb:hover,.nb.on{color:var(--t1);background:var(--s3)}
+.nb.cta{background:var(--blue);color:#fff;margin-left:6px}
+.nb.cta:hover{background:var(--blue2)}
+.uchip{display:flex;align-items:center;gap:7px;background:var(--s3);border:1px solid var(--bd2);
+  border-radius:20px;padding:4px 12px 4px 5px;cursor:pointer;font-size:13px}
+.uav{width:26px;height:26px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
+.uelo{font-size:11px;color:var(--amber);font-family:'JetBrains Mono',monospace}
+
+/* ═══════════════════════════
+   PAGES
+═══════════════════════════ */
+.pg{display:none;position:relative;z-index:1}
+.pg.on{display:block;animation:fi .18s ease}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ═══════════════════════════
+   HOME
+═══════════════════════════ */
+#pg-home{display:none;flex-direction:column;align-items:center;padding:56px 18px 80px}
+#pg-home.on{display:flex}
+.hero{text-align:center;max-width:640px;margin-bottom:48px}
+.htag{display:inline-flex;align-items:center;gap:6px;
+  background:rgba(79,142,247,.1);border:1px solid rgba(79,142,247,.25);
+  border-radius:20px;padding:5px 14px;font-size:11px;font-weight:600;
+  color:var(--blue);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:20px}
+.hero h1{font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(66px,10vw,108px);letter-spacing:5px;line-height:.9;margin-bottom:16px}
+.hero h1 em{-webkit-text-stroke:1.5px var(--blue);color:transparent;font-style:normal}
+.hdesc{font-size:15px;color:var(--t2);line-height:1.8;max-width:420px;margin:0 auto 30px}
+.hbtns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{padding:10px 22px;border-radius:var(--r);font-size:14px;font-weight:600;
+  cursor:pointer;border:none;transition:all .16s;font-family:'Outfit',sans-serif;
+  display:inline-flex;align-items:center;gap:6px}
+.bp{background:var(--blue);color:#fff}.bp:hover{background:var(--blue2);transform:translateY(-1px)}
+.bg2{background:transparent;border:1px solid var(--bd2);color:var(--t1)}.bg2:hover{border-color:var(--blue);color:var(--blue)}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));
+  gap:11px;max-width:820px;width:100%;margin-bottom:48px}
+.fc{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r2);
+  padding:18px 16px;cursor:pointer;transition:all .18s}
+.fc:hover{border-color:var(--bd2);background:var(--s3);transform:translateY(-2px)}
+.fc h3{font-size:13px;font-weight:600;margin:8px 0 5px}
+.fc p{font-size:12px;color:var(--t3);line-height:1.5}
+.hstats{display:flex;gap:40px;flex-wrap:wrap;justify-content:center;
+  padding-top:34px;border-top:1px solid var(--bd);width:100%;max-width:540px}
+.stn{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--blue);line-height:1;text-align:center}
+.stl{font-size:10px;color:var(--t3);margin-top:4px;letter-spacing:1px;text-transform:uppercase;text-align:center}
+
+/* ═══════════════════════════
+   GAME SHARED
+═══════════════════════════ */
+.gw{max-width:1000px;margin:0 auto;padding:14px 16px}
+.gtop{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  background:var(--s2);border:1px solid var(--bd);
+  border-radius:var(--r);padding:9px 14px;margin-bottom:14px;
+}
+.lbl{font-size:12px;color:var(--t3);white-space:nowrap}
+.sep{width:1px;height:20px;background:var(--bd2);flex-shrink:0}
+.pr{display:flex;gap:5px;flex-wrap:wrap}
+.pill{padding:5px 11px;border-radius:20px;border:1px solid var(--bd2);
+  background:transparent;color:var(--t2);font-size:12px;font-weight:600;
+  cursor:pointer;transition:all .14s;font-family:'Outfit',sans-serif}
+.pill:hover{border-color:var(--blue);color:var(--blue)}
+.pill.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.pill.g.on{background:var(--green);border-color:var(--green);color:#07090f}
+.pill.a.on{background:var(--amber);border-color:var(--amber);color:#07090f}
+.pill.r.on{background:var(--red);border-color:var(--red);color:#fff}
+.bnew{margin-left:auto;padding:7px 18px;border-radius:var(--r);
+  background:var(--green);border:none;color:#07090f;font-size:13px;font-weight:700;
+  cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap}
+.bnew:hover{opacity:.85}
+
+/* KEY: canvas wrapper độc lập với CSS layout */
+.gbody{
+  display:flex;
+  gap:14px;
+  align-items:flex-start;
+}
+/* Cột board: chỉ bao canvas, không thay đổi kích thước */
+.bcol{
+  flex:0 0 auto;   /* KHÔNG grow, KHÔNG shrink */
+  line-height:0;
+}
+.bframe{
+  display:inline-block;
+  line-height:0;
+  background:var(--s2);
+  border:1px solid var(--bd2);
+  border-radius:var(--r2);
+  padding:8px;
+  position:relative;
+}
+/* Canvas: JS kiểm soát HOÀN TOÀN kích thước, CSS không can thiệp */
+canvas{
+  display:block;
+  cursor:crosshair;
+}
+
+.scol{flex:1;min-width:175px;max-width:255px;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:12px 14px}
+.ctit{font-size:10px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:8px}
+.srow{display:flex;gap:7px}
+.schip{flex:1;background:var(--s3);border-radius:8px;padding:9px 8px 7px;text-align:center;border:1px solid var(--bd)}
+.swho{font-size:10px;color:var(--t3);margin-bottom:2px}
+.snum{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.snum.b{color:var(--blue)}.snum.r{color:var(--red)}
+.tdot{width:8px;height:8px;border-radius:50%;background:var(--t4);display:inline-block;transition:all .2s;flex-shrink:0}
+.tdot.b.on{background:var(--blue);box-shadow:0 0 7px var(--blue)}
+.tdot.r.on{background:var(--red);box-shadow:0 0 7px var(--red)}
+.tlbl{font-size:13px;color:var(--t2);margin-left:7px}
+.aichosen{font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;color:var(--red)}
+.clist{max-height:130px;overflow-y:auto;font-family:'JetBrains Mono',monospace;
+  font-size:11px;color:var(--t3);display:flex;flex-direction:column;gap:2px}
+.ci{padding:2px 5px;border-radius:4px}
+.ci.p{color:var(--red);background:rgba(247,90,90,.1);font-weight:700}
+.stbar{margin-top:10px;padding:9px 14px;background:var(--s2);border:1px solid var(--bd);
+  border-radius:8px;font-size:13px;color:var(--t2);text-align:center}
+
+/* Win overlay */
+.wov{display:none;position:absolute;inset:0;border-radius:10px;
+  background:rgba(7,9,15,.9);flex-direction:column;align-items:center;
+  justify-content:center;gap:10px;z-index:10;animation:fi .25s ease}
+.wov.on{display:flex}
+.wem{font-size:46px}.wtx{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px}
+.wsb{font-size:13px;color:var(--t2)}
+
+/* ═══════════════════════════
+   ONLINE LOBBY
+═══════════════════════════ */
+.pi{max-width:800px;margin:0 auto;padding:20px 16px}
+.ptit{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;margin-bottom:4px}
+.psub{font-size:13px;color:var(--t3);margin-bottom:18px}
+.tc{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-bottom:14px}
+@media(max-width:540px){.tc{grid-template-columns:1fr}}
+.inp{width:100%;padding:9px 12px;border-radius:8px;background:var(--s3);
+  border:1px solid var(--bd2);color:var(--t1);font-size:13px;
+  font-family:'Outfit',sans-serif;outline:none;transition:border-color .15s;margin-bottom:8px}
+.inp:focus{border-color:var(--blue)}
+select.inp{cursor:pointer}
+.bfull{width:100%;padding:10px;border-radius:8px;border:none;font-size:13px;
+  font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s}
+.bfull.bl{background:var(--blue);color:#fff}.bfull.bl:hover{background:var(--blue2)}
+.bfull.gr{background:var(--green);color:#07090f}.bfull.gr:hover{opacity:.85}
+.rlist{max-height:260px;overflow-y:auto;margin-top:4px}
+.rrow{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;
+  background:var(--s3);border-radius:8px;margin-bottom:6px;border:1px solid var(--bd);
+  cursor:pointer;transition:border-color .15s}
+.rrow:hover{border-color:var(--blue)}
+.rcode{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600}
+.rmeta{font-size:11px;color:var(--t3);margin-top:2px}
+.bdg{font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;
+  background:rgba(31,217,138,.14);color:var(--green)}
+.bdg.fu{background:rgba(247,90,90,.14);color:var(--red)}
+
+/* ═══════════════════════════
+   ONLINE ROOM
+═══════════════════════════ */
+.rl{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
+.rside{width:205px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+.pcard{display:flex;align-items:center;gap:9px;background:var(--s2);
+  border:1px solid var(--bd);border-radius:var(--r);padding:9px 12px;transition:border-color .2s}
+.pcard.act{border-color:rgba(79,142,247,.4)}
+.psym{width:32px;height:32px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
+.psym.x{background:rgba(79,142,247,.12);color:var(--blue);border:1px solid rgba(79,142,247,.25)}
+.psym.o{background:rgba(247,90,90,.12);color:var(--red);border:1px solid rgba(247,90,90,.25)}
+.pname{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pelo{font-size:11px;color:var(--t3);font-family:'JetBrains Mono',monospace}
+.cwrap{background:var(--s2);border:1px solid var(--bd);border-radius:var(--r);padding:11px}
+.cmsgs{height:145px;overflow-y:auto;margin-bottom:7px;display:flex;flex-direction:column;gap:3px}
+.cmsg{font-size:12px;line-height:1.5;word-break:break-word}
+.cmsg .cw{font-weight:700;margin-right:3px}
+.cw.x{color:var(--blue)}.cw.o{color:var(--red)}.cw.s{color:var(--t3)}
+.cr2{display:flex;gap:5px}
+.cin{flex:1;padding:6px 9px;border-radius:7px;background:var(--s3);
+  border:1px solid var(--bd2);color:var(--t1);font-size:12px;
+  font-family:'Outfit',sans-serif;outline:none}
+.csend{padding:6px 11px;border-radius:7px;background:var(--blue);border:none;color:#fff;font-size:12px;cursor:pointer}
+.spcinfo{text-align:center;font-size:12px;color:var(--t3);padding:5px}
+.rbtn2{width:100%;padding:8px;border-radius:8px;border:1px solid var(--bd2);
+  background:var(--s3);color:var(--t1);font-size:13px;font-weight:600;
+  cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;display:none}
+.rbtn2.on{display:block}.rbtn2:hover{border-color:var(--green);color:var(--green)}
+
+/* ═══════════════════════════
+   LEADERBOARD
+═══════════════════════════ */
+table{width:100%;border-collapse:collapse}
+th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--t3);
+  text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--bd)}
+td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(255,255,255,.03)}
+tr:hover td{background:var(--s2)}
+.rk{font-family:'JetBrains Mono',monospace;font-weight:700}
+.rk.g{color:var(--gold)}.rk.s{color:#9fa8bc}.rk.b{color:#b07040}
+.ev{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--blue)}
+
+/* ═══════════════════════════
+   AUTH MODAL
+═══════════════════════════ */
+.ov{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.8);
+  backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:16px}
+.ov.on{display:flex}
+.modal{background:var(--s1);border:1px solid var(--bd2);border-radius:16px;
+  padding:26px;width:100%;max-width:340px;position:relative;animation:fi .2s ease}
+.modal h2{font-size:19px;font-weight:700;margin-bottom:3px}
+.msub{font-size:13px;color:var(--t3);margin-bottom:18px}
+.mcl{position:absolute;top:13px;right:15px;background:none;border:none;color:var(--t3);font-size:18px;cursor:pointer}
+.tabs{display:flex;border-bottom:1px solid var(--bd);margin-bottom:15px}
+.tab{padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;color:var(--t3);
+  background:none;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;
+  transition:all .15s;font-family:'Outfit',sans-serif}
+.tab.on{color:var(--blue);border-bottom-color:var(--blue)}
+.mf{display:none}.mf.on{display:block}
+.mi{width:100%;padding:10px 12px;border-radius:8px;margin-bottom:9px;background:var(--s3);
+  border:1px solid var(--bd2);color:var(--t1);font-size:13px;font-family:'Outfit',sans-serif;outline:none;transition:border-color .15s}
+.mi:focus{border-color:var(--blue)}
+.mb{width:100%;padding:10px;border-radius:8px;border:none;background:var(--blue);
+  color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;margin-top:3px}
+.mb:hover{background:var(--blue2)}
+.merr{font-size:12px;color:var(--red);min-height:16px;margin-top:7px}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--s3);
+  border:1px solid var(--bd2);border-radius:var(--r);padding:10px 16px;font-size:13px;
+  transform:translateY(80px);opacity:0;transition:all .28s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;max-width:260px}
+.toast.on{transform:translateY(0);opacity:1}
+.toast.g{border-color:rgba(31,217,138,.4);color:var(--green)}
+.toast.r{border-color:rgba(247,90,90,.4);color:var(--red)}
+
+@media(max-width:680px){
+  .gbody{flex-wrap:wrap}
+  .scol{max-width:100%;flex-direction:row;flex-wrap:wrap}
+  .scol .card{flex:1;min-width:130px}
+  .nb:not(.cta){display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo" onclick="go('home')">CARO<div class="logo-sub">309</div></div>
+  <div class="nav-r">
+    <button class="nb" onclick="go('ai')">⚔ vs AI</button>
+    <button class="nb" onclick="go('local')">👥 2 Người</button>
+    <button class="nb" onclick="go('online')">🌐 Online</button>
+    <button class="nb" onclick="go('lb')">🏆 BXH</button>
+    <div id="nu"><button class="nb cta" onclick="openAuth()">Đăng nhập</button></div>
+  </div>
+</nav>
+
+<!-- HOME -->
+<section class="pg" id="pg-home">
+  <div class="hero">
+    <div class="htag">🎮 Cờ Năm Mạch Việt Nam</div>
+    <h1>CARO<br/><em>309</em></h1>
+    <p class="hdesc">Đấu trí cùng AI Minimax, thách đấu bạn bè online real-time, leo bảng xếp hạng ELO.</p>
+    <div class="hbtns">
+      <button class="btn bp" onclick="go('ai')">⚔ Chơi vs AI</button>
+      <button class="btn bg2" onclick="go('online')">🌐 Tìm đối thủ</button>
+    </div>
+  </div>
+  <div class="fgrid">
+    <div class="fc" onclick="go('ai')"><div style="font-size:22px">🤖</div><h3>Chơi vs AI</h3><p>Minimax Alpha-Beta, 3 cấp độ Dễ · Vừa · Khó.</p></div>
+    <div class="fc" onclick="go('local')"><div style="font-size:22px">👥</div><h3>2 Người Local</h3><p>Lần lượt chơi trên cùng thiết bị.</p></div>
+    <div class="fc" onclick="go('online')"><div style="font-size:22px">🌐</div><h3>Online Multiplayer</h3><p>Tạo phòng, đấu real-time, chat, quan sát.</p></div>
+    <div class="fc" onclick="go('lb')"><div style="font-size:22px">🏆</div><h3>Bảng Xếp Hạng</h3><p>Hệ thống ELO chuẩn. Thắng leo, thua rớt.</p></div>
+  </div>
+  <div class="hstats">
+    <div><div class="stn" id="h-rooms">—</div><div class="stl">Phòng mở</div></div>
+    <div><div class="stn" id="h-top">—</div><div class="stl">ELO cao nhất</div></div>
+    <div><div class="stn">3</div><div class="stl">Cấp AI</div></div>
+  </div>
+</section>
+
+<!-- VS AI -->
+<section class="pg" id="pg-ai">
+  <div class="gw">
+    <div class="gtop">
+      <span class="lbl">Độ khó:</span>
+      <div class="pr">
+        <button class="pill g" data-lv="Easy"   onclick="setLv(this)">Dễ</button>
+        <button class="pill a" data-lv="Medium" onclick="setLv(this)">Vừa</button>
+        <button class="pill r on" data-lv="Hard" onclick="setLv(this)">Khó</button>
+      </div>
+      <div class="sep"></div>
+      <span class="lbl">Bàn:</span>
+      <div class="pr">
+        <button class="pill" data-sz="10" onclick="setAiSz(this)">10×10</button>
+        <button class="pill on" data-sz="15" onclick="setAiSz(this)">15×15</button>
+        <button class="pill" data-sz="20" onclick="setAiSz(this)">20×20</button>
+      </div>
+      <div class="sep"></div>
+      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t2);cursor:pointer">
+        <input type="checkbox" id="showcands" checked style="accent-color:var(--blue)"/> Gợi ý AI
+      </label>
+      <button class="bnew" onclick="aiNew()">▶ VÁN MỚI</button>
+    </div>
+    <div class="gbody">
+      <div class="bcol">
+        <div class="bframe">
+          <canvas id="cai"></canvas>
+          <div class="wov" id="wai"><div class="wem" id="waiem">🎉</div><div class="wtx" id="waitx">THẮNG!</div><div class="wsb">Nhấn ▶ VÁN MỚI để chơi lại</div></div>
+        </div>
+      </div>
+      <div class="scol">
+        <div class="card"><div class="ctit">Tỉ Số</div>
+          <div class="srow">
+            <div class="schip"><div class="swho">BẠN ✕</div><div class="snum b" id="aisx">0</div></div>
+            <div class="schip"><div class="swho">MÁY ○</div><div class="snum r" id="aiso">0</div></div>
+          </div>
+        </div>
+        <div class="card"><div class="ctit">Lượt Đi</div>
+          <div style="display:flex;align-items:center">
+            <div class="tdot b" id="aitd"></div>
+            <span class="tlbl" id="aitlbl">—</span>
+          </div>
+        </div>
+        <div class="card"><div class="ctit">🤖 AI Chọn</div><div class="aichosen" id="aicho">—</div></div>
+        <div class="card"><div class="ctit">Ô AI Cân Nhắc</div><div class="clist" id="aicands"></div></div>
+        <div class="card"><div class="ctit">Chú Thích</div>
+          <div style="display:flex;flex-direction:column;gap:5px;font-size:12px">
+            <span style="color:var(--blue)">● Bạn (✕)</span>
+            <span style="color:var(--red)">● Máy (○)</span>
+            <span style="color:var(--amber)">□ Gợi ý AI</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stbar" id="aist">Nhấn ▶ VÁN MỚI để bắt đầu</div>
+  </div>
+</section>
+
+<!-- LOCAL 2P -->
+<section class="pg" id="pg-local">
+  <div class="gw">
+    <div class="gtop">
+      <span class="lbl">Bàn:</span>
+      <div class="pr">
+        <button class="pill" data-sz="10" onclick="setLocSz(this)">10×10</button>
+        <button class="pill on" data-sz="15" onclick="setLocSz(this)">15×15</button>
+        <button class="pill" data-sz="20" onclick="setLocSz(this)">20×20</button>
+      </div>
+      <button class="bnew" onclick="locNew()">▶ VÁN MỚI</button>
+    </div>
+    <div class="gbody">
+      <div class="bcol">
+        <div class="bframe">
+          <canvas id="cloc"></canvas>
+          <div class="wov" id="wloc"><div class="wem" id="wlocem">🎉</div><div class="wtx" id="wloctx">THẮNG!</div><div class="wsb">Nhấn ▶ VÁN MỚI để chơi lại</div></div>
+        </div>
+      </div>
+      <div class="scol">
+        <div class="card"><div class="ctit">Tỉ Số</div>
+          <div class="srow">
+            <div class="schip"><div class="swho">NGƯỜI 1 ✕</div><div class="snum b" id="locsx">0</div></div>
+            <div class="schip"><div class="swho">NGƯỜI 2 ○</div><div class="snum r" id="locso">0</div></div>
+          </div>
+        </div>
+        <div class="card"><div class="ctit">Lượt Đi</div>
+          <div style="display:flex;align-items:center">
+            <div class="tdot b" id="loctd"></div>
+            <span class="tlbl" id="loctlbl">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="stbar" id="locst">Nhấn ▶ VÁN MỚI để bắt đầu</div>
+  </div>
+</section>
+
+<!-- ONLINE LOBBY -->
+<section class="pg" id="pg-online">
+  <div class="pi">
+    <div class="ptit">Chơi Online</div>
+    <div class="psub">Tạo phòng hoặc vào phòng có sẵn. Đăng nhập để tính ELO.</div>
+    <div class="tc">
+      <div class="card">
+        <div class="ctit">Tạo Phòng Mới</div>
+        <select class="inp" id="rmsz">
+          <option value="10">Bàn 10×10</option>
+          <option value="15" selected>Bàn 15×15</option>
+          <option value="20">Bàn 20×20</option>
+        </select>
+        <button class="bfull gr" onclick="createRoom()">+ Tạo phòng</button>
+      </div>
+      <div class="card">
+        <div class="ctit">Vào Phòng</div>
+        <input class="inp" id="joincode" placeholder="Mã phòng (VD: A3F7B2C1)" maxlength="8"
+               onkeydown="if(event.key==='Enter')joinRoom()"/>
+        <button class="bfull bl" onclick="joinRoom()">Vào phòng / Quan sát</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctit" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span>Phòng Đang Mở</span>
+        <button onclick="loadRooms()" style="background:none;border:none;color:var(--blue);cursor:pointer;font-size:12px">↻ Làm mới</button>
+      </div>
+      <div class="rlist" id="rlist"><div style="color:var(--t3);font-size:13px">Đang tải...</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ONLINE ROOM -->
+<section class="pg" id="pg-room">
+  <div class="pi" style="max-width:1000px">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
+      <button onclick="leaveRoom()" class="btn bg2" style="padding:6px 13px;font-size:12px">← Rời phòng</button>
+      <span style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--blue)" id="rcodelbl"></span>
+      <button onclick="copyCode()" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:12px">📋 Copy</button>
+      <span style="font-size:12px;color:var(--t3)" id="rspeclbl"></span>
+    </div>
+    <div class="rl">
+      <div class="rside">
+        <div class="pcard" id="prx">
+          <div class="psym x">✕</div>
+          <div style="min-width:0"><div class="pname" id="rpx">Chờ...</div><div class="pelo" id="rex"></div></div>
+          <div class="tdot b" id="rtx" style="margin-left:auto"></div>
+        </div>
+        <div style="text-align:center;font-size:11px;color:var(--t3)">VS</div>
+        <div class="pcard" id="pro2">
+          <div class="psym o">○</div>
+          <div style="min-width:0"><div class="pname" id="rpo">Chờ...</div><div class="pelo" id="reo"></div></div>
+          <div class="tdot r" id="rto" style="margin-left:auto"></div>
+        </div>
+        <div class="cwrap">
+          <div class="ctit">Chat</div>
+          <div class="cmsgs" id="cmsgs"></div>
+          <div class="cr2">
+            <input class="cin" id="cin" placeholder="Nhắn tin..." maxlength="200"
+                   onkeydown="if(event.key==='Enter')sendChat()"/>
+            <button class="csend" onclick="sendChat()">↑</button>
+          </div>
+        </div>
+        <div class="spcinfo" id="spcinfo">👁 0 khán giả</div>
+        <button class="rbtn2" id="rbtn2" onclick="sendRematch()">🔄 Đề nghị đánh lại</button>
+      </div>
+      <div class="bcol">
+        <div class="bframe">
+          <canvas id="croom"></canvas>
+          <div class="wov" id="wroom">
+            <div class="wem" id="wroomem">🏆</div>
+            <div class="wtx" id="wroomtx">KẾT QUẢ</div>
+            <div class="wsb" id="wroomsb">—</div>
+          </div>
+        </div>
+        <div class="stbar" id="roomst" style="margin-top:10px">Chờ đối thủ...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEADERBOARD -->
+<section class="pg" id="pg-lb">
+  <div class="pi">
+    <div class="ptit">🏆 Bảng Xếp Hạng</div>
+    <div class="psub">Top 20 người chơi theo điểm ELO</div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <table>
+        <thead><tr><th style="width:40px">#</th><th>Người chơi</th><th>ELO</th><th>Thắng</th><th>Thua</th><th>Hòa</th><th>Tỉ lệ</th></tr></thead>
+        <tbody id="lbbody"><tr><td colspan="7" style="text-align:center;color:var(--t3);padding:24px">Đang tải...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- AUTH -->
+<div class="ov" id="authov">
+  <div class="modal">
+    <button class="mcl" onclick="closeAuth()">✕</button>
+    <h2>Tài khoản</h2>
+    <p class="msub">Đăng nhập để chơi online và leo BXH</p>
+    <div class="tabs">
+      <button class="tab on" onclick="stab('login')">Đăng nhập</button>
+      <button class="tab"    onclick="stab('reg')">Đăng ký</button>
+    </div>
+    <div class="mf on" id="flog">
+      <input class="mi" id="lu" placeholder="Tên người dùng" autocomplete="username"/>
+      <input class="mi" id="lp" type="password" placeholder="Mật khẩu"
+             autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
+      <button class="mb" onclick="doLogin()">Đăng nhập</button>
+      <div class="merr" id="lerr"></div>
+    </div>
+    <div class="mf" id="freg">
+      <input class="mi" id="ru" placeholder="Tên người dùng (3+ ký tự)"/>
+      <input class="mi" id="rp" type="password" placeholder="Mật khẩu (6+ ký tự)"
+             onkeydown="if(event.key==='Enter')doReg()"/>
+      <button class="mb" onclick="doReg()">Đăng ký</button>
+      <div class="merr" id="rerr"></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
+<script>
+'use strict';
+
+// ─── CONFIG ─────────────────────────────────────────────────────
+// ⚠ THAY 2 DÒNG NÀY sau khi deploy lên Render:
+// const API = 'https://TÊN-APP-CỦA-BẠN.onrender.com';
+// const WSS = 'wss://TÊN-APP-CỦA-BẠN.onrender.com';
+const API = 'http://localhost:8000';  // ← đổi thành URL Render
+const WSS = 'ws://localhost:8000';    // ← đổi ws→wss và URL Render
+
+// ─── AUTH ────────────────────────────────────────────────────────
+let tok  = localStorage.getItem('c309_tok')  || null;
+let user = JSON.parse(localStorage.getItem('c309_user') || 'null');
+
+// ─── CANVAS ENGINE ───────────────────────────────────────────────
+// Cell size tính bằng CSS pixel — KHÔNG thay đổi theo màn hình
+const SZ = 34;
+
+// Màu bàn cờ
+const CL = {
+  ca:'#18203a', cb:'#141b30',
+  grid:'#222d4a', dot:'#334070',
+  xfill:'#0a2040', xstr:'#4f8ef7',
+  ofill:'#280a0a', ostr:'#f75a5a',
+  cfill:'rgba(245,166,35,.1)', cstr:'#f5a623',
+  last:'rgba(245,166,35,.45)', shadow:'rgba(0,0,0,.5)'
+};
+
+/**
+ * Khởi tạo canvas: set width/height pixel = CSS px.
+ * Sau bước này getCell() không cần scale.
+ */
+function initCvs(id, size) {
+  const cvs = document.getElementById(id);
+  const px  = size * SZ;
+  cvs.width  = px;
+  cvs.height = px;
+  // Quan trọng: CSS phải khớp chính xác với pixel size
+  cvs.style.width  = px + 'px';
+  cvs.style.height = px + 'px';
+  return cvs;
+}
+
+/**
+ * Tọa độ click → ô (row, col).
+ * Không cần scale vì canvas pixel == CSS px (đặt trong initCvs).
+ */
+function getCell(cvs, e) {
+  const r = cvs.getBoundingClientRect();
+  return {
+    row: Math.floor((e.clientY - r.top)  / SZ),
+    col: Math.floor((e.clientX - r.left) / SZ),
+  };
+}
+
+/** Vẽ toàn bộ bàn cờ */
+function drawBoard(cvs, board, size, opts) {
+  opts = opts || {};
+  const ctx = cvs.getContext('2d');
+  const W   = size * SZ;
+  ctx.clearRect(0, 0, W, W);
+
+  // Ô nền
+  for (let r = 0; r < size; r++)
+    for (let c = 0; c < size; c++) {
+      ctx.fillStyle = (r + c) % 2 === 0 ? CL.ca : CL.cb;
+      ctx.fillRect(c*SZ, r*SZ, SZ, SZ);
+    }
+
+  // Lưới
+  ctx.strokeStyle = CL.grid; ctx.lineWidth = 0.5;
+  for (let i = 0; i <= size; i++) {
+    ctx.beginPath(); ctx.moveTo(i*SZ, 0);  ctx.lineTo(i*SZ, W); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, i*SZ);  ctx.lineTo(W, i*SZ); ctx.stroke();
+  }
+
+  // Điểm sao
+  const m = Math.floor(size / 2);
+  const pts = [[m, m]];
+  if (size >= 15) [[-4,-4],[-4,4],[4,-4],[4,4]].forEach(([dr,dc]) => pts.push([m+dr, m+dc]));
+  pts.forEach(([r, c]) => {
+    ctx.fillStyle = CL.dot;
+    ctx.beginPath(); ctx.arc(c*SZ+SZ/2, r*SZ+SZ/2, 3, 0, Math.PI*2); ctx.fill();
+  });
+
+  // Gợi ý AI
+  const sc = document.getElementById('showcands');
+  if (opts.cands && sc && sc.checked) {
+    opts.cands.forEach(([r, c]) => {
+      ctx.fillStyle = CL.cfill; ctx.strokeStyle = CL.cstr;
+      ctx.lineWidth = 1.5; ctx.setLineDash([4, 3]);
+      ctx.beginPath(); ctx.rect(c*SZ+3, r*SZ+3, SZ-6, SZ-6);
+      ctx.fill(); ctx.stroke(); ctx.setLineDash([]);
+    });
+    if (opts.chosen) {
+      const [r, c] = opts.chosen;
+      ctx.strokeStyle = CL.cstr; ctx.lineWidth = 2.5; ctx.setLineDash([5, 3]);
+      ctx.beginPath(); ctx.arc(c*SZ+SZ/2, r*SZ+SZ/2, SZ/2-3, 0, Math.PI*2);
+      ctx.stroke(); ctx.setLineDash([]);
+    }
+  }
+
+  // Highlight nước vừa đi
+  if (opts.last) {
+    const [lr, lc] = opts.last;
+    ctx.strokeStyle = CL.last; ctx.lineWidth = 2; ctx.setLineDash([3, 3]);
+    ctx.beginPath(); ctx.rect(lc*SZ+2, lr*SZ+2, SZ-4, SZ-4);
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  // Quân cờ
+  if (!board || !board.length) return;
+  for (let r = 0; r < size; r++)
+    for (let c = 0; c < size; c++) {
+      const p = board[r] && board[r][c];
+      if (p === 'X' || p === 'O') drawPiece(ctx, r, c, p);
+    }
+}
+
+function drawPiece(ctx, r, c, p) {
+  const cx = c*SZ+SZ/2, cy = r*SZ+SZ/2, rad = SZ/2 - 2;
+  // Bóng
+  ctx.fillStyle = CL.shadow;
+  ctx.beginPath(); ctx.arc(cx+1.5, cy+1.5, rad, 0, Math.PI*2); ctx.fill();
+  // Quân
+  ctx.fillStyle   = p === 'X' ? CL.xfill : CL.ofill;
+  ctx.strokeStyle = p === 'X' ? CL.xstr  : CL.ostr;
+  ctx.lineWidth   = 2;
+  ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  // Ánh sáng
+  ctx.fillStyle = p === 'X' ? 'rgba(100,180,255,.18)' : 'rgba(255,120,120,.18)';
+  ctx.beginPath(); ctx.arc(cx - rad*.28, cy - rad*.28, rad*.35, 0, Math.PI*2); ctx.fill();
+  // Ký hiệu
+  if (p === 'X') {
+    const o = rad * .42; ctx.strokeStyle = CL.xstr; ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.moveTo(cx-o, cy-o); ctx.lineTo(cx+o, cy+o); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx+o, cy-o); ctx.lineTo(cx-o, cy+o); ctx.stroke();
+  } else {
+    ctx.strokeStyle = CL.ostr; ctx.lineWidth = 2.2;
+    ctx.beginPath(); ctx.arc(cx, cy, rad * .42, 0, Math.PI*2); ctx.stroke();
+  }
+}
+
+// ─── WIN CHECK (client) ──────────────────────────────────────────
+function checkWin(board, p, r, c, size) {
+  for (const [dr, dc] of [[0,1],[1,0],[1,1],[1,-1]]) {
+    let n = 1;
+    for (let i=1;i<6;i++){const nr=r+dr*i,nc=c+dc*i;if(nr>=0&&nr<size&&nc>=0&&nc<size&&board[nr][nc]===p)n++;else break}
+    for (let i=1;i<6;i++){const nr=r-dr*i,nc=c-dc*i;if(nr>=0&&nr<size&&nc>=0&&nc<size&&board[nr][nc]===p)n++;else break}
+    if (n >= 5) return true;
+  }
+  return false;
+}
+
+// ─── ROUTER ──────────────────────────────────────────────────────
+function go(name) {
+  document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
+  const el = document.getElementById('pg-' + name);
+  if (el) el.classList.add('on');
+  if (name === 'lb')     loadLB();
+  if (name === 'online') loadRooms();
+  if (name === 'home')   loadStats();
+}
+
+// ══════════════════════════════
+//  VS AI
+// ══════════════════════════════
+const G = {
+  board:[], size:15, lv:'Hard',
+  over:false, myTurn:false,
+  last:null, cands:[], chosen:null,
+  sx:0, so:0
+};
+
+function setLv(btn) {
+  document.querySelectorAll('[data-lv]').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on'); G.lv = btn.dataset.lv;
+}
+function setAiSz(btn) {
+  document.querySelectorAll('#pg-ai [data-sz]').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on'); G.size = +btn.dataset.sz;
+}
+
+async function aiNew() {
+  document.getElementById('wai').classList.remove('on');
+  setSt('aist', 'Đang kết nối server...');
+  try {
+    const d = await post('/new_game', { size: G.size });
+    G.board  = d.board;
+    G.size   = d.size;
+    G.over   = false;
+    G.myTurn = true;
+    G.cands  = []; G.chosen = null; G.last = null;
+    const cvs = initCvs('cai', G.size);
+    cvs.style.cursor = 'crosshair';
+    drawBoard(cvs, G.board, G.size, {});
+    aiTurnUI(true);
+    setSt('aist', 'Lượt của bạn — click vào bàn cờ để đặt quân ✕');
+  } catch (e) {
+    setSt('aist', '⚠ ' + e.message);
+    toast('Không kết nối server! Chạy: uvicorn main:app --reload --port 8000', 'r');
+  }
+}
+
+function aiTurnUI(mine) {
+  const td  = document.getElementById('aitd');
+  const lbl = document.getElementById('aitlbl');
+  td.classList.toggle('on', mine);
+  lbl.textContent = mine ? 'Lượt bạn (✕)' : 'Máy đang suy nghĩ...';
+  lbl.style.color = mine ? 'var(--blue)' : 'var(--red)';
+}
+
+document.getElementById('cai').addEventListener('click', async function(e) {
+  if (G.over || !G.myTurn || !G.board.length) return;
+  const { row, col } = getCell(this, e);
+  if (row < 0 || row >= G.size || col < 0 || col >= G.size) return;
+  if (G.board[row][col] !== '') return;
+
+  G.myTurn = false;
+  G.board[row][col] = 'X';
+  G.last = [row, col];
+  this.style.cursor = 'wait';
+  drawBoard(this, G.board, G.size, { last: G.last });
+  aiTurnUI(false);
+  setSt('aist', 'Bạn đánh (' + row + ',' + col + ') — máy đang suy nghĩ...');
+
+  try {
+    const d = await post('/move', { row, col, board: G.board, level: G.lv, token: tok || '' });
+    G.board  = d.board;
+    G.cands  = d.candidates || [];
+    G.chosen = d.ai_move;
+    if (d.ai_move) G.last = d.ai_move;
+    this.style.cursor = 'crosshair';
+    drawBoard(this, G.board, G.size, { cands: G.cands, chosen: G.chosen, last: G.last });
+    aiUpdateSide();
+    if (d.winner === 'X') { aiEnd(true);  return; }
+    if (d.winner === 'O') { aiEnd(false); return; }
+    G.myTurn = true;
+    aiTurnUI(true);
+    setSt('aist', 'Máy đánh (' + d.ai_move[0] + ',' + d.ai_move[1] + ') — lượt bạn');
+  } catch (e) {
+    G.board[row][col] = '';
+    G.myTurn = true;
+    this.style.cursor = 'crosshair';
+    drawBoard(this, G.board, G.size, { last: G.last });
+    setSt('aist', '⚠ ' + e.message);
+    toast(e.message, 'r');
+  }
+});
+
+function aiEnd(win) {
+  G.over = true;
+  document.getElementById('cai').style.cursor = 'default';
+  if (win) { G.sx++; document.getElementById('aisx').textContent = G.sx; }
+  else     { G.so++; document.getElementById('aiso').textContent = G.so; }
+  document.getElementById('waiem').textContent = win ? '🎉' : '🤖';
+  document.getElementById('waitx').textContent  = win ? 'BẠN THẮNG!' : 'MÁY THẮNG!';
+  document.getElementById('wai').classList.add('on');
+  setSt('aist', (win ? '🎉 Bạn thắng!' : '🤖 Máy thắng!') + ' — Nhấn ▶ VÁN MỚI');
+  toast(win ? '🎉 Bạn thắng!' : '🤖 Máy thắng!', win ? 'g' : 'r');
+}
+
+function aiUpdateSide() {
+  const list = document.getElementById('aicands');
+  list.innerHTML = '';
+  G.cands.forEach(([r, c]) => {
+    const pk = G.chosen && G.chosen[0] === r && G.chosen[1] === c;
+    const d  = document.createElement('div');
+    d.className = 'ci' + (pk ? ' p' : '');
+    d.textContent = '(' + String(r).padStart(2,' ') + ', ' + String(c).padStart(2,' ') + ')' + (pk ? ' ◀' : '');
+    list.appendChild(d);
+  });
+  document.getElementById('aicho').textContent =
+    G.chosen ? '(' + G.chosen[0] + ', ' + G.chosen[1] + ')' : '—';
+}
+
+// ══════════════════════════════
+//  LOCAL 2P
+// ══════════════════════════════
+const L = { board:[], size:15, turn:'X', over:false, sx:0, so:0, last:null };
+
+function setLocSz(btn) {
+  document.querySelectorAll('#pg-local [data-sz]').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on'); L.size = +btn.dataset.sz;
+}
+
+function locNew() {
+  document.getElementById('wloc').classList.remove('on');
+  L.board = Array.from({ length: L.size }, () => Array(L.size).fill(''));
+  L.turn = 'X'; L.over = false; L.last = null;
+  const cvs = initCvs('cloc', L.size);
+  drawBoard(cvs, L.board, L.size, {});
+  locTurnUI();
+  setSt('locst', 'Lượt Người 1 — đặt quân ✕');
+}
+
+function locTurnUI() {
+  const mine = L.turn === 'X';
+  const td   = document.getElementById('loctd');
+  const lbl  = document.getElementById('loctlbl');
+  td.className = 'tdot ' + (mine ? 'b' : 'r') + ' on';
+  lbl.textContent = mine ? 'Người 1 (✕)' : 'Người 2 (○)';
+  lbl.style.color = mine ? 'var(--blue)' : 'var(--red)';
+}
+
+document.getElementById('cloc').addEventListener('click', function(e) {
+  if (L.over || !L.board.length) return;
+  const { row, col } = getCell(this, e);
+  if (row < 0 || row >= L.size || col < 0 || col >= L.size) return;
+  if (L.board[row][col] !== '') return;
+  L.board[row][col] = L.turn;
+  L.last = [row, col];
+  drawBoard(this, L.board, L.size, { last: L.last });
+  if (checkWin(L.board, L.turn, row, col, L.size)) {
+    L.over = true;
+    const who = L.turn === 'X' ? 'Người 1 (✕)' : 'Người 2 (○)';
+    if (L.turn === 'X') { L.sx++; document.getElementById('locsx').textContent = L.sx; }
+    else                { L.so++; document.getElementById('locso').textContent = L.so; }
+    document.getElementById('wlocem').textContent = '🎉';
+    document.getElementById('wloctx').textContent = who.toUpperCase() + ' THẮNG!';
+    document.getElementById('wloc').classList.add('on');
+    setSt('locst', '🎉 ' + who + ' thắng!');
+    toast(who + ' thắng!', 'g'); return;
+  }
+  L.turn = L.turn === 'X' ? 'O' : 'X';
+  locTurnUI();
+  setSt('locst', 'Lượt ' + (L.turn === 'X' ? 'Người 1 (✕)' : 'Người 2 (○)'));
+});
+
+// ══════════════════════════════
+//  ONLINE
+// ══════════════════════════════
+let ws = null, myRole = null, myRid = null;
+const R = { board:[], size:15, turn:null, over:false, last:null };
+
+async function createRoom() {
+  if (!tok) { openAuth(); toast('Đăng nhập trước để tạo phòng', 'r'); return; }
+  try {
+    const d = await post('/rooms', { size: +document.getElementById('rmsz').value }, tok);
+    enterRoom(d.room_id);
+  } catch (e) { toast('Lỗi tạo phòng: ' + e.message, 'r'); }
+}
+
+function joinRoom() {
+  const code = document.getElementById('joincode').value.trim().toUpperCase();
+  if (!code) { toast('Nhập mã phòng', 'r'); return; }
+  enterRoom(code);
+}
+
+function enterRoom(rid) {
+  myRid = rid;
+  go('room');
+  document.getElementById('rcodelbl').textContent = 'Phòng: ' + rid;
+  connectWS(rid);
+}
+
+function connectWS(rid) {
+  if (ws) { ws.onclose = null; ws.close(); }
+  ws = new WebSocket(WSS + '/ws/' + rid + '?token=' + (tok || ''));
+  ws.onopen    = () => setSt('roomst', 'Đang kết nối...');
+  ws.onmessage = ev => handleWS(JSON.parse(ev.data));
+  ws.onerror   = () => setSt('roomst', '⚠ Lỗi WebSocket');
+  ws.onclose   = () => {
+    setSt('roomst', 'Mất kết nối — thử lại...');
+    if (myRid) setTimeout(() => connectWS(myRid), 3000);
+  };
+}
+
+function handleWS(msg) {
+  const cvs = document.getElementById('croom');
+  switch (msg.type) {
+    case 'joined':
+      myRole = msg.role;
+      if (msg.board) { R.board = msg.board; R.size = msg.board.length; }
+      R.turn = msg.turn; R.over = msg.status === 'ended';
+      initCvs('croom', R.size);
+      drawBoard(cvs, R.board, R.size, {});
+      updateRoomPlayers(msg.room);
+      if (msg.chat) msg.chat.forEach(m => addChat(m.username, m.role, m.text));
+      setSt('roomst', myRole === 'spectator' ? 'Đang quan sát'
+            : myRole === 'X' ? 'Bạn là ✕ — chờ đối thủ...' : 'Bạn là ○ — chờ ✕ đi');
+      break;
+
+    case 'game_start':
+      R.board = msg.board; R.size = msg.size; R.turn = 'X'; R.over = false; R.last = null;
+      document.getElementById('wroom').classList.remove('on');
+      document.getElementById('rbtn2').classList.remove('on');
+      initCvs('croom', R.size);
+      drawBoard(cvs, R.board, R.size, {});
+      updateRoomPlayers({ players: msg.players });
+      roomTurnUI('X');
+      setSt('roomst', myRole === 'X' ? '▶ Lượt của bạn' : '⌛ Chờ ✕ đi...');
+      toast('Trận đấu bắt đầu!', 'g');
+      break;
+
+    case 'move':
+      R.board = msg.board; R.turn = msg.turn; R.last = [msg.row, msg.col];
+      drawBoard(cvs, R.board, R.size, { last: R.last });
+      roomTurnUI(msg.turn);
+      if (msg.winner) {
+        R.over = true;
+        const iw = msg.winner === myRole;
+        const wtxt = myRole === 'spectator'
+          ? (msg.winner === 'X' ? document.getElementById('rpx').textContent : document.getElementById('rpo').textContent) + ' thắng!'
+          : (iw ? 'Bạn thắng! 🎉' : 'Bạn thua!');
+        document.getElementById('wroomem').textContent = iw ? '🏆' : '😔';
+        document.getElementById('wroomtx').textContent = iw ? 'CHIẾN THẮNG' : 'THẤT BẠI';
+        document.getElementById('wroomsb').textContent = 'Sau ' + (msg.moves || '?') + ' nước';
+        document.getElementById('wroom').classList.add('on');
+        if (myRole !== 'spectator') document.getElementById('rbtn2').classList.add('on');
+        setSt('roomst', wtxt); toast(wtxt, iw ? 'g' : 'r');
+      } else {
+        setSt('roomst', msg.turn === myRole ? '▶ Lượt của bạn' : '⌛ Chờ đối thủ...');
+      }
+      break;
+
+    case 'chat':         addChat(msg.username, msg.role, msg.text); break;
+    case 'room_update':  updateRoomPlayers(msg.room); break;
+    case 'spectator_count':
+      document.getElementById('spcinfo').textContent = '👁 ' + msg.count + ' khán giả';
+      document.getElementById('rspeclbl').textContent = msg.count ? '👁 ' + msg.count + ' xem' : '';
+      break;
+    case 'rematch_vote': toast(msg.username + ' muốn đánh lại (' + msg.votes + '/2)', 'g'); break;
+    case 'player_left':  toast(msg.username + ' rời phòng', 'r'); setSt('roomst', msg.username + ' đã rời'); break;
+    case 'error':        toast(msg.msg, 'r'); break;
+  }
+}
+
+function updateRoomPlayers(room) {
+  if (!room) return;
+  if (room.players) {
+    document.getElementById('rpx').textContent = room.players.X || 'Chờ...';
+    document.getElementById('rpo').textContent = room.players.O || 'Chờ...';
+  }
+  if (room.spectators !== undefined)
+    document.getElementById('spcinfo').textContent = '👁 ' + room.spectators + ' khán giả';
+}
+
+function roomTurnUI(turn) {
+  document.getElementById('rtx').classList.toggle('on', turn === 'X');
+  document.getElementById('rto').classList.toggle('on', turn === 'O');
+  document.getElementById('prx').classList.toggle('act',  turn === 'X');
+  document.getElementById('pro2').classList.toggle('act', turn === 'O');
+}
+
+document.getElementById('croom').addEventListener('click', function(e) {
+  if (!ws || R.over || !myRole || myRole === 'spectator' || R.turn !== myRole) return;
+  const { row, col } = getCell(this, e);
+  if (row < 0 || row >= R.size || col < 0 || col >= R.size) return;
+  if (R.board[row] && R.board[row][col] !== '') return;
+  ws.send(JSON.stringify({ type: 'move', row, col }));
+});
+
+function sendChat() {
+  const el = document.getElementById('cin');
+  const t  = el.value.trim();
+  if (!t || !ws) return;
+  ws.send(JSON.stringify({ type: 'chat', text: t }));
+  el.value = '';
+}
+
+function sendRematch() {
+  if (ws) ws.send(JSON.stringify({ type: 'rematch' }));
+  toast('Đã gửi đề nghị đánh lại', 'g');
+}
+
+function addChat(u, role, text) {
+  const box = document.getElementById('cmsgs');
+  const d   = document.createElement('div');
+  d.className = 'cmsg';
+  const rc = role === 'X' ? 'x' : role === 'O' ? 'o' : 's';
+  d.innerHTML = '<span class="cw ' + rc + '">' + esc(u) + ':</span> ' + esc(text);
+  box.appendChild(d); box.scrollTop = box.scrollHeight;
+}
+
+function copyCode() {
+  if (myRid) { navigator.clipboard.writeText(myRid); toast('Đã copy mã phòng!', 'g'); }
+}
+
+function leaveRoom() {
+  if (ws) { ws.onclose = null; ws.close(); ws = null; }
+  myRid = null; myRole = null; R.over = false;
+  go('online');
+}
+
+async function loadRooms() {
+  const el = document.getElementById('rlist');
+  try {
+    const rooms = await apiGet('/rooms');
+    if (!rooms.length) {
+      el.innerHTML = '<div style="color:var(--t3);font-size:13px;padding:6px 0">Chưa có phòng nào</div>';
+      return;
+    }
+    el.innerHTML = rooms.map(r =>
+      '<div class="rrow" onclick="enterRoom(\'' + r.room_id + '\')">'
+      + '<div><div class="rcode">' + r.room_id + '</div>'
+      + '<div class="rmeta">' + r.size + '×' + r.size + ' · '
+      + (Object.values(r.players).join(' vs ') || '...') + ' · ' + r.moves + ' nước</div></div>'
+      + '<div style="text-align:right">'
+      + '<div class="bdg' + (r.status === 'playing' ? ' fu' : '') + '">'
+      + (r.status === 'waiting' ? 'Chờ người' : 'Đang đấu') + '</div>'
+      + '<div class="rmeta" style="margin-top:3px">👁 ' + r.spectators + '</div></div></div>'
+    ).join('');
+  } catch {
+    el.innerHTML = '<div style="color:var(--t3);font-size:13px">Không kết nối được server</div>';
+  }
+}
+
+// ── LEADERBOARD ──────────────────────────────────────────────────
+async function loadLB() {
+  const tb = document.getElementById('lbbody');
+  try {
+    const data = await apiGet('/leaderboard');
+    tb.innerHTML = data.map((u, i) => {
+      const rc  = i === 0 ? 'g' : i === 1 ? 's' : i === 2 ? 'b' : '';
+      const tot = u.wins + u.losses + u.draws;
+      const wr  = tot ? Math.round(u.wins * 100 / tot) + '%' : '—';
+      const me  = user && u.username === user.username;
+      return '<tr' + (me ? ' style="background:rgba(79,142,247,.06)"' : '') + '>'
+        + '<td class="rk ' + rc + '">' + (i + 1) + '</td>'
+        + '<td>' + esc(u.username) + (me ? ' <span style="font-size:10px;color:var(--blue)">(bạn)</span>' : '') + '</td>'
+        + '<td class="ev">' + u.elo + '</td>'
+        + '<td>' + u.wins + '</td><td>' + u.losses + '</td><td>' + u.draws + '</td>'
+        + '<td style="color:var(--t3)">' + wr + '</td></tr>';
+    }).join('');
+  } catch {
+    tb.innerHTML = '<tr><td colspan="7" style="color:var(--t3);text-align:center;padding:24px">Không tải được — server chưa chạy?</td></tr>';
+  }
+}
+
+async function loadStats() {
+  try {
+    const [h, lb] = await Promise.all([
+      apiGet('/health').catch(() => ({ rooms: 0 })),
+      apiGet('/leaderboard').catch(() => []),
+    ]);
+    document.getElementById('h-rooms').textContent = h.rooms  || 0;
+    document.getElementById('h-top').textContent   = lb[0]?.elo || '—';
+  } catch {}
+}
+
+// ── AUTH ─────────────────────────────────────────────────────────
+function openAuth()  { document.getElementById('authov').classList.add('on'); }
+function closeAuth() { document.getElementById('authov').classList.remove('on'); }
+function stab(t) {
+  document.querySelectorAll('.tab').forEach((b, i) =>
+    b.classList.toggle('on', (i === 0 && t === 'login') || (i === 1 && t === 'reg')));
+  document.getElementById('flog').classList.toggle('on', t === 'login');
+  document.getElementById('freg').classList.toggle('on', t === 'reg');
+}
+async function doLogin() {
+  const u = document.getElementById('lu').value.trim();
+  const p = document.getElementById('lp').value;
+  document.getElementById('lerr').textContent = '';
+  try {
+    const res = await fetch(API + '/auth/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: u, password: p })
+    });
+    const d = await res.json();
+    if (!res.ok) { document.getElementById('lerr').textContent = d.detail; return; }
+    saveAuth(d); closeAuth(); toast('Chào mừng, ' + d.username + '!', 'g');
+  } catch { document.getElementById('lerr').textContent = 'Lỗi kết nối'; }
+}
+async function doReg() {
+  const u = document.getElementById('ru').value.trim();
+  const p = document.getElementById('rp').value;
+  document.getElementById('rerr').textContent = '';
+  try {
+    const res = await fetch(API + '/auth/register', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: u, password: p })
+    });
+    const d = await res.json();
+    if (!res.ok) { document.getElementById('rerr').textContent = d.detail; return; }
+    saveAuth(d); closeAuth(); toast('Tài khoản tạo thành công!', 'g');
+  } catch { document.getElementById('rerr').textContent = 'Lỗi kết nối'; }
+}
+function saveAuth(d) {
+  tok = d.token; user = { username: d.username, elo: d.elo };
+  localStorage.setItem('c309_tok',  d.token);
+  localStorage.setItem('c309_user', JSON.stringify(user));
+  renderUser();
+}
+function logout() {
+  tok = null; user = null;
+  localStorage.removeItem('c309_tok'); localStorage.removeItem('c309_user');
+  renderUser(); toast('Đã đăng xuất', '');
+}
+function renderUser() {
+  const el = document.getElementById('nu');
+  el.innerHTML = user
+    ? '<div class="uchip" onclick="logout()" title="Click để đăng xuất">'
+      + '<div class="uav">' + esc(user.username[0].toUpperCase()) + '</div>'
+      + '<span style="font-size:13px">' + esc(user.username) + '</span>'
+      + '<span class="uelo">' + user.elo + '</span></div>'
+    : '<button class="nb cta" onclick="openAuth()">Đăng nhập</button>';
+}
+
+// ── HTTP ─────────────────────────────────────────────────────────
+async function apiGet(path) {
+  const r = await fetch(API + path);
+  if (!r.ok) throw new Error('HTTP ' + r.status);
+  return r.json();
+}
+async function post(path, body, token) {
+  const h = { 'Content-Type': 'application/json' };
+  if (token) h['Authorization'] = 'Bearer ' + token;
+  let res;
+  try {
+    res = await fetch(API + path, { method: 'POST', headers: h, body: JSON.stringify(body) });
+  } catch {
+    throw new Error('Không kết nối được server. Đã chạy uvicorn chưa?');
+  }
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error(e.detail || 'HTTP ' + res.status);
+  }
+  return res.json();
+}
+
+// ── UTILS ────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function setSt(id, msg) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = msg;
+}
+let _tt;
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = 'toast on ' + type;
+  clearTimeout(_tt); _tt = setTimeout(() => el.className = 'toast', 3200);
+}
+document.getElementById('authov').addEventListener('click', function(e) {
+  if (e.target === this) closeAuth();
+});
+
+// ── INIT ─────────────────────────────────────────────────────────
+renderUser();
+go('home');
+</script>
+</body>
+</html>
