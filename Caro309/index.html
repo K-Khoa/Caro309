@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Caro309 — Cờ Caro</title>
+<title>Caro309 — Cờ Năm Mạch</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 
@@ -24,6 +24,9 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--s4);border-radius:2px}
 
+/* ═══════════════════════════
+   NAV
+═══════════════════════════ */
 nav{
   position:sticky;top:0;z-index:200;height:54px;
   background:rgba(7,9,15,.93);backdrop-filter:blur(18px);
@@ -46,10 +49,16 @@ nav{
   display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
 .uelo{font-size:11px;color:var(--amber);font-family:'JetBrains Mono',monospace}
 
+/* ═══════════════════════════
+   PAGES
+═══════════════════════════ */
 .pg{display:none;position:relative;z-index:1}
 .pg.on{display:block;animation:fi .18s ease}
 @keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
+/* ═══════════════════════════
+   HOME
+═══════════════════════════ */
 #pg-home{display:none;flex-direction:column;align-items:center;padding:56px 18px 80px}
 #pg-home.on{display:flex}
 .hero{text-align:center;max-width:640px;margin-bottom:48px}
@@ -79,6 +88,9 @@ nav{
 .stn{font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--blue);line-height:1;text-align:center}
 .stl{font-size:10px;color:var(--t3);margin-top:4px;letter-spacing:1px;text-transform:uppercase;text-align:center}
 
+/* ═══════════════════════════
+   GAME SHARED
+═══════════════════════════ */
 .gw{max-width:1000px;margin:0 auto;padding:14px 16px}
 .gtop{
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;
@@ -101,13 +113,15 @@ nav{
   cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap}
 .bnew:hover{opacity:.85}
 
+/* KEY: canvas wrapper độc lập với CSS layout */
 .gbody{
   display:flex;
   gap:14px;
   align-items:flex-start;
 }
+/* Cột board: chỉ bao canvas, không thay đổi kích thước */
 .bcol{
-  flex:0 0 auto;   
+  flex:0 0 auto;   /* KHÔNG grow, KHÔNG shrink */
   line-height:0;
 }
 .bframe{
@@ -119,6 +133,7 @@ nav{
   padding:8px;
   position:relative;
 }
+/* Canvas: JS kiểm soát HOÀN TOÀN kích thước, CSS không can thiệp */
 canvas{
   display:block;
   cursor:crosshair;
@@ -144,6 +159,7 @@ canvas{
 .stbar{margin-top:10px;padding:9px 14px;background:var(--s2);border:1px solid var(--bd);
   border-radius:8px;font-size:13px;color:var(--t2);text-align:center}
 
+/* Win overlay */
 .wov{display:none;position:absolute;inset:0;border-radius:10px;
   background:rgba(7,9,15,.9);flex-direction:column;align-items:center;
   justify-content:center;gap:10px;z-index:10;animation:fi .25s ease}
@@ -151,6 +167,9 @@ canvas{
 .wem{font-size:46px}.wtx{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px}
 .wsb{font-size:13px;color:var(--t2)}
 
+/* ═══════════════════════════
+   ONLINE LOBBY
+═══════════════════════════ */
 .pi{max-width:800px;margin:0 auto;padding:20px 16px}
 .ptit{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:2px;margin-bottom:4px}
 .psub{font-size:13px;color:var(--t3);margin-bottom:18px}
@@ -176,6 +195,9 @@ select.inp{cursor:pointer}
   background:rgba(31,217,138,.14);color:var(--green)}
 .bdg.fu{background:rgba(247,90,90,.14);color:var(--red)}
 
+/* ═══════════════════════════
+   ONLINE ROOM
+═══════════════════════════ */
 .rl{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
 .rside{width:205px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
 .pcard{display:flex;align-items:center;gap:9px;background:var(--s2);
@@ -203,6 +225,9 @@ select.inp{cursor:pointer}
   cursor:pointer;font-family:'Outfit',sans-serif;transition:all .15s;display:none}
 .rbtn2.on{display:block}.rbtn2:hover{border-color:var(--green);color:var(--green)}
 
+/* ═══════════════════════════
+   LEADERBOARD
+═══════════════════════════ */
 table{width:100%;border-collapse:collapse}
 th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--t3);
   text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--bd)}
@@ -212,6 +237,9 @@ tr:hover td{background:var(--s2)}
 .rk.g{color:var(--gold)}.rk.s{color:#9fa8bc}.rk.b{color:#b07040}
 .ev{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--blue)}
 
+/* ═══════════════════════════
+   AUTH MODAL
+═══════════════════════════ */
 .ov{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.8);
   backdrop-filter:blur(8px);align-items:center;justify-content:center;padding:16px}
 .ov.on{display:flex}
@@ -234,6 +262,7 @@ tr:hover td{background:var(--s2)}
 .mb:hover{background:var(--blue2)}
 .merr{font-size:12px;color:var(--red);min-height:16px;margin-top:7px}
 
+/* TOAST */
 .toast{position:fixed;bottom:20px;right:20px;z-index:999;background:var(--s3);
   border:1px solid var(--bd2);border-radius:var(--r);padding:10px 16px;font-size:13px;
   transform:translateY(80px);opacity:0;transition:all .28s cubic-bezier(.4,0,.2,1);
@@ -252,6 +281,7 @@ tr:hover td{background:var(--s2)}
 </head>
 <body>
 
+<!-- NAV -->
 <nav>
   <div class="logo" onclick="go('home')">CARO<div class="logo-sub">309</div></div>
   <div class="nav-r">
@@ -263,11 +293,12 @@ tr:hover td{background:var(--s2)}
   </div>
 </nav>
 
+<!-- HOME -->
 <section class="pg" id="pg-home">
   <div class="hero">
-    <div class="htag">🎮 Cờ Caro</div>
+    <div class="htag">🎮 Cờ Năm Mạch Việt Nam</div>
     <h1>CARO<br/><em>309</em></h1>
-    <p class="hdesc">Đấu trí cùng AI, thách đấu bạn bè online real-time, leo bảng xếp hạng ELO.</p>
+    <p class="hdesc">Đấu trí cùng AI Minimax, thách đấu bạn bè online real-time, leo bảng xếp hạng ELO.</p>
     <div class="hbtns">
       <button class="btn bp" onclick="go('ai')">⚔ Chơi vs AI</button>
       <button class="btn bg2" onclick="go('online')">🌐 Tìm đối thủ</button>
@@ -286,6 +317,7 @@ tr:hover td{background:var(--s2)}
   </div>
 </section>
 
+<!-- VS AI -->
 <section class="pg" id="pg-ai">
   <div class="gw">
     <div class="gtop">
@@ -343,6 +375,7 @@ tr:hover td{background:var(--s2)}
   </div>
 </section>
 
+<!-- LOCAL 2P -->
 <section class="pg" id="pg-local">
   <div class="gw">
     <div class="gtop">
@@ -380,6 +413,7 @@ tr:hover td{background:var(--s2)}
   </div>
 </section>
 
+<!-- ONLINE LOBBY -->
 <section class="pg" id="pg-online">
   <div class="pi">
     <div class="ptit">Chơi Online</div>
@@ -411,6 +445,7 @@ tr:hover td{background:var(--s2)}
   </div>
 </section>
 
+<!-- ONLINE ROOM -->
 <section class="pg" id="pg-room">
   <div class="pi" style="max-width:1000px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
@@ -459,19 +494,21 @@ tr:hover td{background:var(--s2)}
   </div>
 </section>
 
+<!-- LEADERBOARD -->
 <section class="pg" id="pg-lb">
   <div class="pi">
     <div class="ptit">🏆 Bảng Xếp Hạng</div>
     <div class="psub">Top 20 người chơi theo điểm ELO</div>
     <div class="card" style="padding:0;overflow:hidden">
       <table>
-        <thead><tr><th style="width:40px">#</th><th>Người chơi</th><th>ELO</th><th>Thắng</th><th>Thua</th><th>Hòa</th><th>Tỉ lệ</th></tr></thead>
+        <thead><tr><th style="width:40px">#</th><th>Người chơi</th><th>ELO</th><th>Thắng</th><th>Thua</th><th>Tham Gia</th><th>Tỉ lệ</th></tr></thead>
         <tbody id="lbbody"><tr><td colspan="7" style="text-align:center;color:var(--t3);padding:24px">Đang tải...</td></tr></tbody>
       </table>
     </div>
   </div>
 </section>
 
+<!-- AUTH -->
 <div class="ov" id="authov">
   <div class="modal">
     <button class="mcl" onclick="closeAuth()">✕</button>
@@ -500,16 +537,25 @@ tr:hover td{background:var(--s2)}
 
 <div class="toast" id="toast"></div>
 
+<!-- ══════════════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════════════ -->
 <script>
 'use strict';
 
+// ─── CONFIG ─────────────────────────────────────────────────────
 const API = 'https://caro309.onrender.com';
 const WSS = 'wss://caro309.onrender.com';
 
+// ─── AUTH ────────────────────────────────────────────────────────
 let tok  = localStorage.getItem('c309_tok')  || null;
 let user = JSON.parse(localStorage.getItem('c309_user') || 'null');
 
+// ─── CANVAS ENGINE ───────────────────────────────────────────────
+// Cell size tính bằng CSS pixel — KHÔNG thay đổi theo màn hình
 const SZ = 34;
+
+// Màu bàn cờ
 const CL = {
   ca:'#18203a', cb:'#141b30',
   grid:'#222d4a', dot:'#334070',
@@ -519,16 +565,25 @@ const CL = {
   last:'rgba(245,166,35,.45)', shadow:'rgba(0,0,0,.5)'
 };
 
+/**
+ * Khởi tạo canvas: set width/height pixel = CSS px.
+ * Sau bước này getCell() không cần scale.
+ */
 function initCvs(id, size) {
   const cvs = document.getElementById(id);
   const px  = size * SZ;
   cvs.width  = px;
   cvs.height = px;
+  // Quan trọng: CSS phải khớp chính xác với pixel size
   cvs.style.width  = px + 'px';
   cvs.style.height = px + 'px';
   return cvs;
 }
 
+/**
+ * Tọa độ click → ô (row, col).
+ * Không cần scale vì canvas pixel == CSS px (đặt trong initCvs).
+ */
 function getCell(cvs, e) {
   const r = cvs.getBoundingClientRect();
   return {
@@ -537,24 +592,28 @@ function getCell(cvs, e) {
   };
 }
 
+/** Vẽ toàn bộ bàn cờ */
 function drawBoard(cvs, board, size, opts) {
   opts = opts || {};
   const ctx = cvs.getContext('2d');
   const W   = size * SZ;
   ctx.clearRect(0, 0, W, W);
 
+  // Ô nền
   for (let r = 0; r < size; r++)
     for (let c = 0; c < size; c++) {
       ctx.fillStyle = (r + c) % 2 === 0 ? CL.ca : CL.cb;
       ctx.fillRect(c*SZ, r*SZ, SZ, SZ);
     }
 
+  // Lưới
   ctx.strokeStyle = CL.grid; ctx.lineWidth = 0.5;
   for (let i = 0; i <= size; i++) {
     ctx.beginPath(); ctx.moveTo(i*SZ, 0);  ctx.lineTo(i*SZ, W); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(0, i*SZ);  ctx.lineTo(W, i*SZ); ctx.stroke();
   }
 
+  // Điểm sao
   const m = Math.floor(size / 2);
   const pts = [[m, m]];
   if (size >= 15) [[-4,-4],[-4,4],[4,-4],[4,4]].forEach(([dr,dc]) => pts.push([m+dr, m+dc]));
@@ -563,6 +622,7 @@ function drawBoard(cvs, board, size, opts) {
     ctx.beginPath(); ctx.arc(c*SZ+SZ/2, r*SZ+SZ/2, 3, 0, Math.PI*2); ctx.fill();
   });
 
+  // Gợi ý AI
   const sc = document.getElementById('showcands');
   if (opts.cands && sc && sc.checked) {
     opts.cands.forEach(([r, c]) => {
@@ -579,6 +639,7 @@ function drawBoard(cvs, board, size, opts) {
     }
   }
 
+  // Highlight nước vừa đi
   if (opts.last) {
     const [lr, lc] = opts.last;
     ctx.strokeStyle = CL.last; ctx.lineWidth = 2; ctx.setLineDash([3, 3]);
@@ -586,6 +647,7 @@ function drawBoard(cvs, board, size, opts) {
     ctx.stroke(); ctx.setLineDash([]);
   }
 
+  // Quân cờ
   if (!board || !board.length) return;
   for (let r = 0; r < size; r++)
     for (let c = 0; c < size; c++) {
@@ -596,14 +658,18 @@ function drawBoard(cvs, board, size, opts) {
 
 function drawPiece(ctx, r, c, p) {
   const cx = c*SZ+SZ/2, cy = r*SZ+SZ/2, rad = SZ/2 - 2;
+  // Bóng
   ctx.fillStyle = CL.shadow;
   ctx.beginPath(); ctx.arc(cx+1.5, cy+1.5, rad, 0, Math.PI*2); ctx.fill();
+  // Quân
   ctx.fillStyle   = p === 'X' ? CL.xfill : CL.ofill;
   ctx.strokeStyle = p === 'X' ? CL.xstr  : CL.ostr;
   ctx.lineWidth   = 2;
   ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+  // Ánh sáng
   ctx.fillStyle = p === 'X' ? 'rgba(100,180,255,.18)' : 'rgba(255,120,120,.18)';
   ctx.beginPath(); ctx.arc(cx - rad*.28, cy - rad*.28, rad*.35, 0, Math.PI*2); ctx.fill();
+  // Ký hiệu
   if (p === 'X') {
     const o = rad * .42; ctx.strokeStyle = CL.xstr; ctx.lineWidth = 2.2;
     ctx.beginPath(); ctx.moveTo(cx-o, cy-o); ctx.lineTo(cx+o, cy+o); ctx.stroke();
@@ -613,6 +679,8 @@ function drawPiece(ctx, r, c, p) {
     ctx.beginPath(); ctx.arc(cx, cy, rad * .42, 0, Math.PI*2); ctx.stroke();
   }
 }
+
+// ─── WIN CHECK (client) ──────────────────────────────────────────
 function checkWin(board, p, r, c, size) {
   for (const [dr, dc] of [[0,1],[1,0],[1,1],[1,-1]]) {
     let n = 1;
@@ -623,6 +691,7 @@ function checkWin(board, p, r, c, size) {
   return false;
 }
 
+// ─── ROUTER ──────────────────────────────────────────────────────
 function go(name) {
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
   const el = document.getElementById('pg-' + name);
@@ -632,6 +701,9 @@ function go(name) {
   if (name === 'home')   loadStats();
 }
 
+// ══════════════════════════════
+//  VS AI
+// ══════════════════════════════
 const G = {
   board:[], size:15, lv:'Hard',
   over:false, myTurn:false,
@@ -647,6 +719,7 @@ function setAiSz(btn) {
   document.querySelectorAll('#pg-ai [data-sz]').forEach(b => b.classList.remove('on'));
   btn.classList.add('on'); G.size = +btn.dataset.sz;
 }
+
 async function aiNew() {
   document.getElementById('wai').classList.remove('on');
   setSt('aist', 'Đang kết nối server...');
@@ -740,6 +813,9 @@ function aiUpdateSide() {
     G.chosen ? '(' + G.chosen[0] + ', ' + G.chosen[1] + ')' : '—';
 }
 
+// ══════════════════════════════
+//  LOCAL 2P
+// ══════════════════════════════
 const L = { board:[], size:15, turn:'X', over:false, sx:0, so:0, last:null };
 
 function setLocSz(btn) {
@@ -790,6 +866,9 @@ document.getElementById('cloc').addEventListener('click', function(e) {
   setSt('locst', 'Lượt ' + (L.turn === 'X' ? 'Người 1 (✕)' : 'Người 2 (○)'));
 });
 
+// ══════════════════════════════
+//  ONLINE
+// ══════════════════════════════
 let ws = null, myRole = null, myRid = null;
 const R = { board:[], size:15, turn:null, over:false, last:null };
 
@@ -882,6 +961,7 @@ function handleWS(msg) {
       break;
     case 'rematch_vote': toast(msg.username + ' muốn đánh lại (' + msg.votes + '/2)', 'g'); break;
     case 'player_left':  toast(msg.username + ' rời phòng', 'r'); setSt('roomst', msg.username + ' đã rời'); break;
+    case 'ping': if(ws && ws.readyState===1) ws.send(JSON.stringify({type:'pong'})); break;
     case 'error':        toast(msg.msg, 'r'); break;
   }
 }
@@ -966,6 +1046,7 @@ async function loadRooms() {
   }
 }
 
+// ── LEADERBOARD ──────────────────────────────────────────────────
 async function loadLB() {
   const tb = document.getElementById('lbbody');
   try {
@@ -979,7 +1060,8 @@ async function loadLB() {
         + '<td class="rk ' + rc + '">' + (i + 1) + '</td>'
         + '<td>' + esc(u.username) + (me ? ' <span style="font-size:10px;color:var(--blue)">(bạn)</span>' : '') + '</td>'
         + '<td class="ev">' + u.elo + '</td>'
-        + '<td>' + u.wins + '</td><td>' + u.losses + '</td><td>' + u.draws + '</td>'
+        + '<td>' + u.wins + '</td><td>' + u.losses + '</td>'
+        + '<td style="color:var(--t3);font-size:11px">' + (u.joined || '—') + '</td>'
         + '<td style="color:var(--t3)">' + wr + '</td></tr>';
     }).join('');
   } catch {
@@ -998,6 +1080,7 @@ async function loadStats() {
   } catch {}
 }
 
+// ── AUTH ─────────────────────────────────────────────────────────
 function openAuth()  { document.getElementById('authov').classList.add('on'); }
 function closeAuth() { document.getElementById('authov').classList.remove('on'); }
 function stab(t) {
@@ -1055,6 +1138,7 @@ function renderUser() {
     : '<button class="nb cta" onclick="openAuth()">Đăng nhập</button>';
 }
 
+// ── HTTP ─────────────────────────────────────────────────────────
 async function apiGet(path) {
   const r = await fetch(API + path);
   if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -1076,6 +1160,7 @@ async function post(path, body, token) {
   return res.json();
 }
 
+// ── UTILS ────────────────────────────────────────────────────────
 function esc(s) {
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
@@ -1093,6 +1178,7 @@ document.getElementById('authov').addEventListener('click', function(e) {
   if (e.target === this) closeAuth();
 });
 
+// ── INIT ─────────────────────────────────────────────────────────
 renderUser();
 go('home');
 </script>
