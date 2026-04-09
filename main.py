@@ -87,25 +87,48 @@ def hash_pw(pw: str) -> str:
     salt = b"caro309_fixed_salt_v1"
     return hashlib.pbkdf2_hmac("sha256", pw.encode(), salt, 100_000).hex()
 
-def _hash_pw_old(pw: str) -> str:
-    """Hash cũ dùng HMAC + SECRET (để backward-compat với tài khoản cũ)."""
-    return hmac.new(SECRET.encode(), pw.encode(), hashlib.sha256).hexdigest()
-
 def verify_pw(pw: str, stored_hash: str) -> bool:
-    """So sánh mật khẩu với hash đã lưu — thử cả 2 phương thức hash."""
-    if stored_hash == hash_pw(pw):
+    """So sánh mật khẩu với hash đã lưu — thử TẤT CẢ phương thức hash có thể."""
+    # 1. PBKDF2 mới (current)
+    salt = b"caro309_fixed_salt_v1"
+    if stored_hash == hashlib.pbkdf2_hmac("sha256", pw.encode(), salt, 100_000).hex():
         return True
-    if stored_hash == _hash_pw_old(pw):
+    # 2. HMAC(SECRET, pw)
+    if stored_hash == hmac.new(SECRET.encode(), pw.encode(), hashlib.sha256).hexdigest():
         return True
-    # Thử thêm: SHA256 đơn giản với SECRET concat
-    simple = hashlib.sha256((SECRET + pw).encode()).hexdigest()
-    if stored_hash == simple:
+    # 3. SHA256(SECRET + pw)
+    if stored_hash == hashlib.sha256((SECRET + pw).encode()).hexdigest():
         return True
-    # Thử: SHA256 thuần
-    plain = hashlib.sha256(pw.encode()).hexdigest()
-    if stored_hash == plain:
+    # 4. SHA256(pw) thuần
+    if stored_hash == hashlib.sha256(pw.encode()).hexdigest():
+        return True
+    # 5. HMAC(pw, SECRET) — reversed
+    if stored_hash == hmac.new(pw.encode(), SECRET.encode(), hashlib.sha256).hexdigest():
+        return True
+    # 6. SHA256(pw + SECRET)
+    if stored_hash == hashlib.sha256((pw + SECRET).encode()).hexdigest():
+        return True
+    # 7. PBKDF2 with SECRET as salt
+    if stored_hash == hashlib.pbkdf2_hmac("sha256", pw.encode(), SECRET.encode(), 100_000).hex():
+        return True
+    # 8. MD5 (unlikely but just in case)
+    if stored_hash == hashlib.md5(pw.encode()).hexdigest():
+        return True
+    # 9. Mật khẩu lưu plaintext (dev mode)
+    if stored_hash == pw:
         return True
     return False
+
+# Endpoint debug: kiểm tra hash format trong DB (chỉ dùng khi debug, xóa sau)
+@app.get("/debug/check_hash/{username}")
+def debug_check_hash(username: str):
+    db = get_db()
+    row = db.execute("SELECT password FROM users WHERE username=?", (username,)).fetchone()
+    db.close()
+    if not row:
+        return {"error": "User not found"}
+    h = row["password"]
+    return {"hash_length": len(h), "hash_prefix": h[:16], "hash_suffix": h[-8:]}
 
 class AuthIn(BaseModel):
     username: str
@@ -165,6 +188,27 @@ def me(user=Depends(get_user)):
         raise HTTPException(404)
     return {"username": row["username"], "elo": row["elo"],
             "wins": row["wins"], "losses": row["losses"], "draws": row["draws"]}
+
+class ResetPW(BaseModel):
+    username: str
+    new_password: str
+    admin_key: str = ""
+
+@app.post("/auth/reset_password")
+def reset_password(body: ResetPW):
+    """Reset mật khẩu — cần admin_key = SECRET hoặc 'caro309reset'."""
+    if body.admin_key not in (SECRET, "caro309reset"):
+        raise HTTPException(403, "Sai admin key")
+    if len(body.new_password) < 6:
+        raise HTTPException(400, "Mật khẩu phải ít nhất 6 ký tự")
+    db = get_db()
+    row = db.execute("SELECT id FROM users WHERE username=?", (body.username,)).fetchone()
+    if not row:
+        db.close()
+        raise HTTPException(404, "Không tìm thấy user")
+    db.execute("UPDATE users SET password=? WHERE id=?", (hash_pw(body.new_password), row["id"]))
+    db.commit(); db.close()
+    return {"ok": True, "message": f"Đã reset mật khẩu cho {body.username}"}
 
 @app.get("/leaderboard")
 def leaderboard():
