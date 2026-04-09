@@ -374,9 +374,9 @@ tr:hover td{background:rgba(45,91,227,.02)}
       <div class="sep"></div>
       <span class="lbl">Bàn:</span>
       <div class="pr">
-        <button class="pill" data-sz="10" onclick="setAiSz(this)">10</button>
-        <button class="pill on" data-sz="15" onclick="setAiSz(this)">15</button>
         <button class="pill" data-sz="20" onclick="setAiSz(this)">20</button>
+        <button class="pill on" data-sz="25" onclick="setAiSz(this)">25</button>
+        <button class="pill" data-sz="30" onclick="setAiSz(this)">30</button>
       </div>
       <div class="sep"></div>
       <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t2);cursor:pointer">
@@ -412,9 +412,9 @@ tr:hover td{background:rgba(45,91,227,.02)}
     <div class="gtop">
       <span class="lbl">Bàn:</span>
       <div class="pr">
-        <button class="pill" data-sz="10" onclick="setLocSz(this)">10</button>
-        <button class="pill on" data-sz="15" onclick="setLocSz(this)">15</button>
         <button class="pill" data-sz="20" onclick="setLocSz(this)">20</button>
+        <button class="pill on" data-sz="25" onclick="setLocSz(this)">25</button>
+        <button class="pill" data-sz="30" onclick="setLocSz(this)">30</button>
       </div>
       <button class="bnew" onclick="locNew()">▶ VÁN MỚI</button>
     </div>
@@ -442,7 +442,7 @@ tr:hover td{background:rgba(45,91,227,.02)}
     <div class="psub">Tạo phòng hoặc vào phòng có sẵn. Đăng nhập để tính ELO.</div>
     <div class="tc">
       <div class="card"><div class="ctit">Tạo Phòng Mới</div>
-        <select class="inp" id="rmsz"><option value="10">Bàn 10×10</option><option value="15" selected>Bàn 15×15</option><option value="20">Bàn 20×20</option></select>
+        <select class="inp" id="rmsz"><option value="20">Bàn 20×20</option><option value="25" selected>Bàn 25×25</option><option value="30">Bàn 30×30</option></select>
         <button class="bfull gr" onclick="createRoom()">+ Tạo phòng</button></div>
       <div class="card"><div class="ctit">Vào Phòng</div>
         <input class="inp" id="joincode" placeholder="Mã phòng (VD: A3F7B2C1)" maxlength="8" onkeydown="if(event.key==='Enter')joinRoom()"/>
@@ -523,7 +523,8 @@ tr:hover td{background:rgba(45,91,227,.02)}
 'use strict';
 const API='https://caro309.onrender.com',WSS='wss://caro309.onrender.com';
 let tok=localStorage.getItem('c309_tok')||null,user=JSON.parse(localStorage.getItem('c309_user')||'null');
-const SZ=34;
+let SZ=34;
+function cellSz(n){return n<=20?30:n<=25?26:22}
 const CL={ca:'#ddd8c8',cb:'#d4cfbe',grid:'#c2bca8',dot:'#a8a28e',xfill:'#c4d3f0',xstr:'#2d5be3',ofill:'#f0c4c4',ostr:'#d93b3b',cfill:'rgba(192,123,8,.1)',cstr:'#c07b08',last:'rgba(192,123,8,.5)',shadow:'rgba(0,0,0,.08)'};
 
 // Card click handlers
@@ -531,7 +532,7 @@ document.querySelectorAll('.fgrid .fc').forEach((fc,i)=>{
   fc.addEventListener('click',()=>{['ai','local','online','lb'][i]&&go(['ai','local','online','lb'][i])});
 });
 
-function initCvs(id,size){const c=document.getElementById(id),px=size*SZ;c.width=px;c.height=px;c.style.width=px+'px';c.style.height=px+'px';return c}
+function initCvs(id,size){SZ=cellSz(size);const c=document.getElementById(id),px=size*SZ;c.width=px;c.height=px;c.style.width=px+'px';c.style.height=px+'px';return c}
 function getCell(c,e){const r=c.getBoundingClientRect();return{row:Math.floor((e.clientY-r.top)/SZ),col:Math.floor((e.clientX-r.left)/SZ)}}
 function drawBoard(cvs,board,size,opts){
   opts=opts||{};const ctx=cvs.getContext('2d'),W=size*SZ;ctx.clearRect(0,0,W,W);
@@ -559,10 +560,20 @@ function drawPiece(ctx,r,c,p){
   if(p==='X'){const o=rad*.42;ctx.strokeStyle=CL.xstr;ctx.lineWidth=2.2;ctx.beginPath();ctx.moveTo(cx-o,cy-o);ctx.lineTo(cx+o,cy+o);ctx.stroke();ctx.beginPath();ctx.moveTo(cx+o,cy-o);ctx.lineTo(cx-o,cy+o);ctx.stroke()}
   else{ctx.strokeStyle=CL.ostr;ctx.lineWidth=2.2;ctx.beginPath();ctx.arc(cx,cy,rad*.42,0,Math.PI*2);ctx.stroke()}
 }
-function checkWin(board,p,r,c,size){for(const[dr,dc]of[[0,1],[1,0],[1,1],[1,-1]]){let n=1;for(let i=1;i<6;i++){const nr=r+dr*i,nc=c+dc*i;if(nr>=0&&nr<size&&nc>=0&&nc<size&&board[nr][nc]===p)n++;else break}for(let i=1;i<6;i++){const nr=r-dr*i,nc=c-dc*i;if(nr>=0&&nr<size&&nc>=0&&nc<size&&board[nr][nc]===p)n++;else break}if(n>=5)return true}return false}
+function checkWin(board,p,r,c,size){
+  for(const[dr,dc]of[[0,1],[1,0],[1,1],[1,-1]]){
+    let cp=0;for(let i=1;i<20;i++){const nr=r+dr*i,nc=c+dc*i;if(nr>=0&&nr<size&&nc>=0&&nc<size&&board[nr][nc]===p)cp++;else break}
+    let cn=0;for(let i=1;i<20;i++){const nr=r-dr*i,nc=c-dc*i;if(nr>=0&&nr<size&&nc>=0&&nc<size&&board[nr][nc]===p)cn++;else break}
+    if(1+cp+cn!==5)continue;
+    let bl=0;
+    const e1r=r+dr*(cp+1),e1c=c+dc*(cp+1);if(!(e1r>=0&&e1r<size&&e1c>=0&&e1c<size)||board[e1r][e1c]!=='')bl++;
+    const e2r=r-dr*(cn+1),e2c=c-dc*(cn+1);if(!(e2r>=0&&e2r<size&&e2c>=0&&e2c<size)||board[e2r][e2c]!=='')bl++;
+    if(bl<2)return true;
+  }return false;
+}
 function go(name){document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));const el=document.getElementById('pg-'+name);if(el)el.classList.add('on');if(name==='lb')loadLB();if(name==='online')loadRooms()}
 
-const G={board:[],size:15,lv:'Hard',over:false,myTurn:false,last:null,cands:[],chosen:null,sx:0,so:0};
+const G={board:[],size:25,lv:'Hard',over:false,myTurn:false,last:null,cands:[],chosen:null,sx:0,so:0};
 function setLv(b){document.querySelectorAll('[data-lv]').forEach(x=>x.classList.remove('on'));b.classList.add('on');G.lv=b.dataset.lv}
 function setAiSz(b){document.querySelectorAll('#pg-ai [data-sz]').forEach(x=>x.classList.remove('on'));b.classList.add('on');G.size=+b.dataset.sz}
 async function aiNew(){document.getElementById('wai').classList.remove('on');setSt('aist','Đang kết nối server (có thể mất 30s nếu server đang ngủ)...');try{const d=await post('/new_game',{size:G.size});G.board=d.board;G.size=d.size;G.over=false;G.myTurn=true;G.cands=[];G.chosen=null;G.last=null;const c=initCvs('cai',G.size);c.style.cursor='crosshair';drawBoard(c,G.board,G.size,{});aiTurnUI(true);setSt('aist','Lượt của bạn — click vào bàn cờ')}catch(e){setSt('aist','⚠ '+e.message);toast('Server đang khởi động — thử lại sau vài giây','r')}}
@@ -577,7 +588,7 @@ document.getElementById('cai').addEventListener('click',async function(e){
 function aiEnd(w){G.over=true;document.getElementById('cai').style.cursor='default';if(w){G.sx++;document.getElementById('aisx').textContent=G.sx}else{G.so++;document.getElementById('aiso').textContent=G.so}document.getElementById('waiem').textContent=w?'🎉':'🤖';document.getElementById('waitx').textContent=w?'BẠN THẮNG!':'MÁY THẮNG!';document.getElementById('wai').classList.add('on');setSt('aist',(w?'🎉 Bạn thắng!':'🤖 Máy thắng!')+' — Nhấn ▶ VÁN MỚI');toast(w?'🎉 Bạn thắng!':'🤖 Máy thắng!',w?'g':'r');refreshUser()}
 function aiUpdateSide(){const l=document.getElementById('aicands');l.innerHTML='';G.cands.forEach(([r,c])=>{const pk=G.chosen&&G.chosen[0]===r&&G.chosen[1]===c;const d=document.createElement('div');d.className='ci'+(pk?' p':'');d.textContent='('+String(r+1).padStart(2,' ')+', '+String(c+1).padStart(2,' ')+')'+(pk?' ◀':'');l.appendChild(d)});document.getElementById('aicho').textContent=G.chosen?'('+(G.chosen[0]+1)+', '+(G.chosen[1]+1)+')':'—'}
 
-const L={board:[],size:15,turn:'X',over:false,sx:0,so:0,last:null};
+const L={board:[],size:25,turn:'X',over:false,sx:0,so:0,last:null};
 function setLocSz(b){document.querySelectorAll('#pg-local [data-sz]').forEach(x=>x.classList.remove('on'));b.classList.add('on');L.size=+b.dataset.sz}
 function locNew(){document.getElementById('wloc').classList.remove('on');L.board=Array.from({length:L.size},()=>Array(L.size).fill(''));L.turn='X';L.over=false;L.last=null;initCvs('cloc',L.size);drawBoard(document.getElementById('cloc'),L.board,L.size,{});locTurnUI();setSt('locst','Lượt Người 1 — đặt quân ✕')}
 function locTurnUI(){const m=L.turn==='X';document.getElementById('loctd').className='tdot '+(m?'b':'r')+' on';const l=document.getElementById('loctlbl');l.textContent=m?'Người 1 (✕)':'Người 2 (○)';l.style.color=m?'var(--acc)':'var(--red)'}
