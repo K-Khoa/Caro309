@@ -565,7 +565,7 @@ function go(name){document.querySelectorAll('.pg').forEach(p=>p.classList.remove
 const G={board:[],size:15,lv:'Hard',over:false,myTurn:false,last:null,cands:[],chosen:null,sx:0,so:0};
 function setLv(b){document.querySelectorAll('[data-lv]').forEach(x=>x.classList.remove('on'));b.classList.add('on');G.lv=b.dataset.lv}
 function setAiSz(b){document.querySelectorAll('#pg-ai [data-sz]').forEach(x=>x.classList.remove('on'));b.classList.add('on');G.size=+b.dataset.sz}
-async function aiNew(){document.getElementById('wai').classList.remove('on');setSt('aist','Đang kết nối...');try{const d=await post('/new_game',{size:G.size});G.board=d.board;G.size=d.size;G.over=false;G.myTurn=true;G.cands=[];G.chosen=null;G.last=null;const c=initCvs('cai',G.size);c.style.cursor='crosshair';drawBoard(c,G.board,G.size,{});aiTurnUI(true);setSt('aist','Lượt của bạn — click vào bàn cờ')}catch(e){setSt('aist','⚠ '+e.message);toast('Không kết nối server!','r')}}
+async function aiNew(){document.getElementById('wai').classList.remove('on');setSt('aist','Đang kết nối server (có thể mất 30s nếu server đang ngủ)...');try{const d=await post('/new_game',{size:G.size});G.board=d.board;G.size=d.size;G.over=false;G.myTurn=true;G.cands=[];G.chosen=null;G.last=null;const c=initCvs('cai',G.size);c.style.cursor='crosshair';drawBoard(c,G.board,G.size,{});aiTurnUI(true);setSt('aist','Lượt của bạn — click vào bàn cờ')}catch(e){setSt('aist','⚠ '+e.message);toast('Server đang khởi động — thử lại sau vài giây','r')}}
 function aiTurnUI(m){const td=document.getElementById('aitd'),l=document.getElementById('aitlbl');td.classList.toggle('on',m);l.textContent=m?'Lượt bạn (✕)':'Máy đang suy nghĩ...';l.style.color=m?'var(--acc)':'var(--red)'}
 document.getElementById('cai').addEventListener('click',async function(e){
   if(G.over||!G.myTurn||!G.board.length)return;const{row,col}=getCell(this,e);
@@ -612,19 +612,56 @@ function sendRematch(){if(ws)ws.send(JSON.stringify({type:'rematch'}));toast('Đ
 function addChat(u,role,text){const box=document.getElementById('cmsgs'),d=document.createElement('div');d.className='cmsg';const rc=role==='X'?'x':role==='O'?'o':'s';d.innerHTML='<span class="cw '+rc+'">'+esc(u)+':</span> '+esc(text);box.appendChild(d);box.scrollTop=box.scrollHeight}
 function copyCode(){if(myRid){navigator.clipboard.writeText(myRid);toast('Đã copy mã phòng!','g')}}
 function leaveRoom(){if(ws){ws.onclose=null;ws.close();ws=null}myRid=null;myRole=null;R.over=false;go('online')}
-async function loadRooms(){const el=document.getElementById('rlist');try{const rooms=await apiGet('/rooms');if(!rooms.length){el.innerHTML='<div style="color:var(--t3);font-size:13px;padding:6px 0">Chưa có phòng nào</div>';return}el.innerHTML=rooms.map(r=>'<div class="rrow" onclick="enterRoom(\''+r.room_id+'\')"><div><div class="rcode">'+r.room_id+'</div><div class="rmeta">'+r.size+'×'+r.size+' · '+(Object.values(r.players).join(' vs ')||'...')+' · '+r.moves+' nước</div></div><div style="text-align:right"><div class="bdg'+(r.status==='playing'?' fu':'')+'">'+(r.status==='waiting'?'Chờ người':'Đang đấu')+'</div><div class="rmeta" style="margin-top:3px">👁 '+r.spectators+'</div></div></div>').join('')}catch{el.innerHTML='<div style="color:var(--t3);font-size:13px">Không kết nối được server</div>'}}
-async function loadLB(){const tb=document.getElementById('lbbody');try{const data=await apiGet('/leaderboard');if(!data||!data.length){tb.innerHTML='<tr><td colspan="7" style="color:var(--t3);text-align:center;padding:24px">Chưa có người chơi nào</td></tr>';return}tb.innerHTML=data.map((u,i)=>{const rc=i===0?'g':i===1?'s':i===2?'b':'';const w=u.wins||0,l=u.losses||0,d=u.draws||0,tot=w+l+d;const wr=tot?Math.round(w*100/tot)+'%':'—';const me=user&&u.username===user.username;return'<tr'+(me?' style="background:rgba(45,91,227,.04)"':'')+'><td class="rk '+rc+'">'+(i+1)+'</td><td>'+esc(u.username)+(me?' <span style="font-size:10px;color:var(--acc)">(bạn)</span>':'')+'</td><td class="ev">'+(u.elo||1000)+'</td><td>'+w+'</td><td>'+l+'</td><td style="color:var(--t3);font-size:11px">'+(u.joined||'—')+'</td><td style="color:var(--t3)">'+wr+'</td></tr>'}).join('')}catch(err){console.error('loadLB error:',err);tb.innerHTML='<tr><td colspan="7" style="color:var(--t3);text-align:center;padding:24px">Không tải được — server chưa chạy?</td></tr>'}}
+async function loadRooms(){const el=document.getElementById('rlist');try{const rooms=await apiGet('/rooms');if(!rooms.length){el.innerHTML='<div style="color:var(--t3);font-size:13px;padding:6px 0">Chưa có phòng nào</div>';return}el.innerHTML=rooms.map(r=>'<div class="rrow" onclick="enterRoom(\''+r.room_id+'\')"><div><div class="rcode">'+r.room_id+'</div><div class="rmeta">'+r.size+'×'+r.size+' · '+(Object.values(r.players).join(' vs ')||'...')+' · '+r.moves+' nước</div></div><div style="text-align:right"><div class="bdg'+(r.status==='playing'?' fu':'')+'">'+(r.status==='waiting'?'Chờ người':'Đang đấu')+'</div><div class="rmeta" style="margin-top:3px">👁 '+r.spectators+'</div></div></div>').join('')}catch{el.innerHTML='<div style="color:var(--t3);font-size:13px">Server đang khởi động — <a href="#" onclick="loadRooms();return false" style="color:var(--acc)">thử lại</a></div>'}}
+async function loadLB(){const tb=document.getElementById('lbbody');try{const data=await apiGet('/leaderboard');if(!data||!data.length){tb.innerHTML='<tr><td colspan="7" style="color:var(--t3);text-align:center;padding:24px">Chưa có người chơi nào</td></tr>';return}tb.innerHTML=data.map((u,i)=>{const rc=i===0?'g':i===1?'s':i===2?'b':'';const w=u.wins||0,l=u.losses||0,d=u.draws||0,tot=w+l+d;const wr=tot?Math.round(w*100/tot)+'%':'—';const me=user&&u.username===user.username;return'<tr'+(me?' style="background:rgba(45,91,227,.04)"':'')+'><td class="rk '+rc+'">'+(i+1)+'</td><td>'+esc(u.username)+(me?' <span style="font-size:10px;color:var(--acc)">(bạn)</span>':'')+'</td><td class="ev">'+(u.elo||1000)+'</td><td>'+w+'</td><td>'+l+'</td><td style="color:var(--t3);font-size:11px">'+(u.joined||'—')+'</td><td style="color:var(--t3)">'+wr+'</td></tr>'}).join('')}catch(err){console.error('loadLB error:',err);tb.innerHTML='<tr><td colspan="7" style="color:var(--t3);text-align:center;padding:24px">Server đang khởi động — <a href="#" onclick="loadLB();return false" style="color:var(--acc)">thử lại</a></td></tr>'}}
 
 function openAuth(){document.getElementById('authov').classList.add('on')}function closeAuth(){document.getElementById('authov').classList.remove('on')}
 function stab(t){document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',(i===0&&t==='login')||(i===1&&t==='reg')));document.getElementById('flog').classList.toggle('on',t==='login');document.getElementById('freg').classList.toggle('on',t==='reg')}
-async function doLogin(){const u=document.getElementById('lu').value.trim(),p=document.getElementById('lp').value;document.getElementById('lerr').textContent='';try{const res=await fetch(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});const d=await res.json();if(!res.ok){document.getElementById('lerr').textContent=d.detail;return}saveAuth(d);closeAuth();toast('Chào mừng, '+d.username+'!','g')}catch{document.getElementById('lerr').textContent='Lỗi kết nối'}}
-async function doReg(){const u=document.getElementById('ru').value.trim(),p=document.getElementById('rp').value;document.getElementById('rerr').textContent='';try{const res=await fetch(API+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});const d=await res.json();if(!res.ok){document.getElementById('rerr').textContent=d.detail;return}saveAuth(d);closeAuth();toast('Tài khoản tạo thành công!','g')}catch{document.getElementById('rerr').textContent='Lỗi kết nối'}}
+async function doLogin(){
+  const u=document.getElementById('lu').value.trim(),p=document.getElementById('lp').value;
+  const errEl=document.getElementById('lerr');const btn=document.querySelector('#flog .mb');
+  errEl.textContent='';if(!u||!p){errEl.textContent='Nhập tên và mật khẩu';return}
+  btn.textContent='Đang kết nối...';btn.disabled=true;
+  try{
+    const res=await fetchRetry(API+'/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+    const d=await res.json();
+    if(!res.ok){errEl.textContent=d.detail||'Lỗi đăng nhập';return}
+    saveAuth(d);closeAuth();toast('Chào mừng, '+d.username+'!','g');
+  }catch(e){errEl.textContent=e.message==='TIMEOUT'?'Server đang khởi động, thử lại...':'Lỗi kết nối — server có thể đang ngủ, thử lại sau 30s'}
+  finally{btn.textContent='Đăng nhập';btn.disabled=false}
+}
+async function doReg(){
+  const u=document.getElementById('ru').value.trim(),p=document.getElementById('rp').value;
+  const errEl=document.getElementById('rerr');const btn=document.querySelector('#freg .mb');
+  errEl.textContent='';if(!u||!p){errEl.textContent='Nhập tên và mật khẩu';return}
+  btn.textContent='Đang kết nối...';btn.disabled=true;
+  try{
+    const res=await fetchRetry(API+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+    const d=await res.json();
+    if(!res.ok){errEl.textContent=d.detail||'Lỗi đăng ký';return}
+    saveAuth(d);closeAuth();toast('Tài khoản tạo thành công!','g');
+  }catch(e){errEl.textContent=e.message==='TIMEOUT'?'Server đang khởi động, thử lại...':'Lỗi kết nối — server có thể đang ngủ, thử lại sau 30s'}
+  finally{btn.textContent='Đăng ký';btn.disabled=false}
+}
 function saveAuth(d){tok=d.token;user={username:d.username,elo:d.elo};localStorage.setItem('c309_tok',d.token);localStorage.setItem('c309_user',JSON.stringify(user));renderUser()}
 async function refreshUser(){if(!tok)return;try{const res=await fetch(API+'/auth/me',{headers:{'Authorization':'Bearer '+tok}});if(!res.ok)return;const d=await res.json();user={username:d.username,elo:d.elo};localStorage.setItem('c309_user',JSON.stringify(user));renderUser()}catch{}}
 function logout(){tok=null;user=null;localStorage.removeItem('c309_tok');localStorage.removeItem('c309_user');renderUser();toast('Đã đăng xuất','')}
 function renderUser(){const el=document.getElementById('nu');el.innerHTML=user?'<div class="uchip" onclick="logout()" title="Click để đăng xuất"><div class="uav">'+esc(user.username[0].toUpperCase())+'</div><span style="font-size:13px;font-weight:500">'+esc(user.username)+'</span><span class="uelo">'+user.elo+'</span></div>':'<button class="nb cta" onclick="openAuth()">Đăng nhập</button>'}
-async function apiGet(path){const r=await fetch(API+path);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
-async function post(path,body,token){const h={'Content-Type':'application/json'};if(token)h['Authorization']='Bearer '+token;let res;try{res=await fetch(API+path,{method:'POST',headers:h,body:JSON.stringify(body)})}catch{throw new Error('Không kết nối được server.')}if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.detail||'HTTP '+res.status)}return res.json()}
+async function fetchRetry(url,opts,retries=2,timeout=30000){
+  for(let i=0;i<=retries;i++){
+    const ctrl=new AbortController();const tid=setTimeout(()=>ctrl.abort(),timeout);
+    try{const res=await fetch(url,{...opts,signal:ctrl.signal});clearTimeout(tid);return res}
+    catch(e){clearTimeout(tid);if(i===retries)throw e.name==='AbortError'?new Error('TIMEOUT'):e;
+      await new Promise(r=>setTimeout(r,3000))}
+  }
+}
+async function apiGet(path){const r=await fetchRetry(API+path,{},1,20000);if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}
+async function post(path,body,token){
+  const h={'Content-Type':'application/json'};if(token)h['Authorization']='Bearer '+token;
+  let res;try{res=await fetchRetry(API+path,{method:'POST',headers:h,body:JSON.stringify(body)},1,30000)}
+  catch{throw new Error('Server đang khởi động — vui lòng thử lại')}
+  if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.detail||'HTTP '+res.status)}return res.json()
+}
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function togglePw(id,btn){const inp=document.getElementById(id);if(inp.type==='password'){inp.type='text';btn.textContent='🙈'}else{inp.type='password';btn.textContent='👁'}}
 function updateTimers(tx,to){const ex=document.getElementById('timer-x'),eo=document.getElementById('timer-o');if(!ex||!eo)return;ex.textContent=tx;eo.textContent=to;ex.className=tx<=10?'timer-danger':tx<=20?'timer-warn':'';eo.className=to<=10?'timer-danger':to<=20?'timer-warn':''}
