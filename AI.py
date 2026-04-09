@@ -3,12 +3,11 @@ import random
 import Board
 
 BEAM_WIDTH = 15
-DEPTH      = 3
-
 DIRECTIONS = [(1,0),(0,1),(1,1),(1,-1)]
 
 PATTERNS = {
-    (5,0): 10_000_000, (5,1): 10_000_000, (5,2): 10_000_000,
+    (5,0): 0,          # 5 quân bị chặn 2 đầu = 0 (luật chặn trong)
+    (5,1): 10_000_000, (5,2): 10_000_000,
     (4,2): 500_000,    (4,1): 50_000,
     (3,2): 10_000,     (3,1): 1_000,
     (2,2): 500,        (2,1): 100,
@@ -30,8 +29,12 @@ def _line_score(r: int, c: int, dr: int, dc: int, player: str) -> int:
                 open_ends += 1; break
             else:
                 break
-    if count >= 5:
+    if count == 5 and open_ends >= 1:
         return 10_000_000
+    if count == 5 and open_ends == 0:
+        return 0
+    if count >= 6:
+        return 0
     return PATTERNS.get((count, open_ends), 0)
 
 
@@ -134,17 +137,11 @@ def _minimax(depth: int, maximizing: bool, alpha: float, beta: float) -> tuple[f
 # ── Public API ───────────────────────────────────────────────────
 
 def ai_move(level: str) -> tuple[int,int]:
-    """Trả về (row, col) tốt nhất cho máy (O) theo level.
-    Easy:   3 bước nhìn trước
-    Medium: 4 bước nhìn trước
-    Hard:   5 bước nhìn trước
-    """
-    # Thắng ngay nếu có thể
+    """Trả về (row, col) tốt nhất cho máy (O) theo level."""
     win = _immediate_win("O")
     if win:
         return win
 
-    # Chặn người chơi thắng
     block = _immediate_win("X")
     if block:
         return block
