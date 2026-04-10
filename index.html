@@ -470,10 +470,10 @@ tr:hover td{background:rgba(45,91,227,.02)}
     <div class="rl">
       <div class="rside">
         <div class="pcard" id="prx"><div class="psym x">✕</div><div style="min-width:0"><div class="pname" id="rpx">Chờ...</div><div class="pelo" id="rex"></div></div>
-          <div style="margin-left:auto;text-align:right"><div class="tdot b" id="rtx"></div><div id="timer-x" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--acc);margin-top:3px">60</div></div></div>
+          <div style="margin-left:auto;text-align:right"><div class="tdot b" id="rtx"></div><div id="timer-x" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--acc);margin-top:3px"></div></div></div>
         <div style="text-align:center;font-size:11px;color:var(--t3);font-weight:600">VS</div>
         <div class="pcard" id="pro2"><div class="psym o">○</div><div style="min-width:0"><div class="pname" id="rpo">Chờ...</div><div class="pelo" id="reo"></div></div>
-          <div style="margin-left:auto;text-align:right"><div class="tdot r" id="rto"></div><div id="timer-o" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--red);margin-top:3px">60</div></div></div>
+          <div style="margin-left:auto;text-align:right"><div class="tdot r" id="rto"></div><div id="timer-o" style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:var(--red);margin-top:3px"></div></div></div>
         <div class="cwrap"><div class="ctit">Chat</div><div class="cmsgs" id="cmsgs"></div>
           <div class="cr2"><input class="cin" id="cin" placeholder="Nhắn tin..." maxlength="200" onkeydown="if(event.key==='Enter')sendChat()"/><button class="csend" onclick="sendChat()">↑</button></div></div>
         <div class="spcinfo" id="spcinfo">👁 0 khán giả</div>
@@ -606,14 +606,14 @@ function updateMyElo(msg){
 }
 function handleWS(msg){const cvs=document.getElementById('croom');switch(msg.type){
 case'joined':myRole=msg.role;if(msg.board){R.board=msg.board;R.size=msg.board.length}R.turn=msg.turn;R.over=msg.status==='ended';initCvs('croom',R.size);drawBoard(cvs,R.board,R.size,{});updateRoomPlayers(msg.room);if(msg.chat)msg.chat.forEach(m=>addChat(m.username,m.role,m.text));setSt('roomst',myRole==='spectator'?'Đang quan sát':myRole==='X'?'Bạn là ✕ — chờ đối thủ...':'Bạn là ○ — chờ ✕ đi');break;
-case'game_start':R.board=msg.board;R.size=msg.size;R.turn='X';R.over=false;R.last=null;document.getElementById('wroom').classList.remove('on');document.getElementById('rbtn2').classList.remove('on');initCvs('croom',R.size);drawBoard(cvs,R.board,R.size,{});updateRoomPlayers({players:msg.players});roomTurnUI('X');updateTimers(msg.timer_x||60,msg.timer_o||60);setSt('roomst',myRole==='X'?'▶ Lượt của bạn':'⌛ Chờ ✕ đi...');toast('Trận đấu bắt đầu!','g');break;
-case'move':R.board=msg.board;R.turn=msg.turn;R.last=[msg.row,msg.col];drawBoard(cvs,R.board,R.size,{last:R.last});roomTurnUI(msg.turn);if(msg.winner){R.over=true;const iw=msg.winner===myRole;const wt=myRole==='spectator'?(msg.winner==='X'?document.getElementById('rpx').textContent:document.getElementById('rpo').textContent)+' thắng!':(iw?'Bạn thắng! 🎉':'Bạn thua!');document.getElementById('wroomem').textContent=iw?'🏆':'😔';document.getElementById('wroomtx').textContent=iw?'CHIẾN THẮNG':'THẤT BẠI';document.getElementById('wroomsb').textContent='Sau '+(msg.moves||'?')+' nước';document.getElementById('wroom').classList.add('on');if(myRole!=='spectator')document.getElementById('rbtn2').classList.add('on');setSt('roomst',wt);toast(wt,iw?'g':'r');updateMyElo(msg);refreshUser()}else{if(msg.timer_x!==undefined)updateTimers(msg.timer_x,msg.timer_o);setSt('roomst',msg.turn===myRole?'▶ Lượt của bạn':'⌛ Chờ đối thủ...')}break;
+case'game_start':R.board=msg.board;R.size=msg.size;R.turn='X';R.over=false;R.last=null;document.getElementById('wroom').classList.remove('on');document.getElementById('rbtn2').classList.remove('on');initCvs('croom',R.size);drawBoard(cvs,R.board,R.size,{});updateRoomPlayers({players:msg.players});roomTurnUI('X');updateTimer(msg.timer||60,'X');setSt('roomst',myRole==='X'?'▶ Lượt của bạn':'⌛ Chờ ✕ đi...');toast('Trận đấu bắt đầu!','g');break;
+case'move':R.board=msg.board;R.turn=msg.turn;R.last=[msg.row,msg.col];drawBoard(cvs,R.board,R.size,{last:R.last});roomTurnUI(msg.turn);if(msg.winner){R.over=true;const iw=msg.winner===myRole;const wt=myRole==='spectator'?(msg.winner==='X'?document.getElementById('rpx').textContent:document.getElementById('rpo').textContent)+' thắng!':(iw?'Bạn thắng! 🎉':'Bạn thua!');document.getElementById('wroomem').textContent=iw?'🏆':'😔';document.getElementById('wroomtx').textContent=iw?'CHIẾN THẮNG':'THẤT BẠI';document.getElementById('wroomsb').textContent='Sau '+(msg.moves||'?')+' nước';document.getElementById('wroom').classList.add('on');if(myRole!=='spectator')document.getElementById('rbtn2').classList.add('on');setSt('roomst',wt);toast(wt,iw?'g':'r');updateMyElo(msg);refreshUser()}else{if(msg.timer!==undefined)updateTimer(msg.timer,msg.turn);setSt('roomst',msg.turn===myRole?'▶ Lượt của bạn':'⌛ Chờ đối thủ...')}break;
 case'chat':addChat(msg.username,msg.role,msg.text);break;case'room_update':updateRoomPlayers(msg.room);break;
 case'spectator_count':document.getElementById('spcinfo').textContent='👁 '+msg.count+' khán giả';document.getElementById('rspeclbl').textContent=msg.count?'👁 '+msg.count+' xem':'';break;
 case'rematch_vote':toast(msg.username+' muốn đánh lại ('+msg.votes+'/2)','g');break;
 case'player_left':toast(msg.username+' rời phòng','r');setSt('roomst',msg.username+' đã rời');if(msg.winner&&!R.over){R.over=true;const iw=msg.winner===myRole;document.getElementById('wroomem').textContent=iw?'🏆':'😔';document.getElementById('wroomtx').textContent=iw?'CHIẾN THẮNG':'ĐỐI THỦ RỜI';document.getElementById('wroomsb').textContent='Đối thủ đã rời phòng';document.getElementById('wroom').classList.add('on');updateMyElo(msg);refreshUser()}break;
-case'ping':if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'pong'}));break;case'tick':updateTimers(msg.timer_x,msg.timer_o);break;
-case'timeout':{const lost=msg.loser===myRole;const wt2=myRole==='spectator'?(msg.winner==='X'?document.getElementById('rpx').textContent:document.getElementById('rpo').textContent)+' thắng (hết giờ)!':lost?'Bạn hết giờ! 😔':'Đối thủ hết giờ! 🎉';R.over=true;updateTimers(msg.timer_x,msg.timer_o);document.getElementById('wroomem').textContent=lost?'⏰':'🏆';document.getElementById('wroomtx').textContent=lost?'HẾT GIỜ':'CHIẾN THẮNG';document.getElementById('wroomsb').textContent='Hết thời gian suy nghĩ';document.getElementById('wroom').classList.add('on');if(myRole!=='spectator')document.getElementById('rbtn2').classList.add('on');setSt('roomst',wt2);toast(wt2,lost?'r':'g');updateMyElo(msg);refreshUser();break}
+case'ping':if(ws&&ws.readyState===1)ws.send(JSON.stringify({type:'pong'}));break;case'tick':updateTimer(msg.timer,msg.turn);break;
+case'timeout':{const lost=msg.loser===myRole;const wt2=myRole==='spectator'?(msg.winner==='X'?document.getElementById('rpx').textContent:document.getElementById('rpo').textContent)+' thắng (hết giờ)!':lost?'Bạn hết giờ! 😔':'Đối thủ hết giờ! 🎉';R.over=true;updateTimer(msg.timer,msg.turn);document.getElementById('wroomem').textContent=lost?'⏰':'🏆';document.getElementById('wroomtx').textContent=lost?'HẾT GIỜ':'CHIẾN THẮNG';document.getElementById('wroomsb').textContent='Hết thời gian suy nghĩ';document.getElementById('wroom').classList.add('on');if(myRole!=='spectator')document.getElementById('rbtn2').classList.add('on');setSt('roomst',wt2);toast(wt2,lost?'r':'g');updateMyElo(msg);refreshUser();break}
 case'error':toast(msg.msg,'r');break}}
 function updateRoomPlayers(r){if(!r)return;if(r.players){document.getElementById('rpx').textContent=r.players.X||'Chờ...';document.getElementById('rpo').textContent=r.players.O||'Chờ...'}if(r.spectators!==undefined)document.getElementById('spcinfo').textContent='👁 '+r.spectators+' khán giả'}
 function roomTurnUI(t){document.getElementById('rtx').classList.toggle('on',t==='X');document.getElementById('rto').classList.toggle('on',t==='O');document.getElementById('prx').classList.toggle('act',t==='X');document.getElementById('pro2').classList.toggle('act',t==='O')}
@@ -675,7 +675,16 @@ async function post(path,body,token){
 }
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function togglePw(id,btn){const inp=document.getElementById(id);if(inp.type==='password'){inp.type='text';btn.textContent='🙈'}else{inp.type='password';btn.textContent='👁'}}
-function updateTimers(tx,to){const ex=document.getElementById('timer-x'),eo=document.getElementById('timer-o');if(!ex||!eo)return;ex.textContent=tx;eo.textContent=to;ex.className=tx<=10?'timer-danger':tx<=20?'timer-warn':'';eo.className=to<=10?'timer-danger':to<=20?'timer-warn':''}
+function updateTimer(t,turn){
+  const ex=document.getElementById('timer-x'),eo=document.getElementById('timer-o');
+  if(ex)ex.textContent=turn==='X'?t:'';
+  if(eo)eo.textContent=turn==='O'?t:'';
+  // Warning colors on active player timer
+  const active=turn==='X'?ex:eo;
+  const inactive=turn==='X'?eo:ex;
+  if(active)active.className=t<=10?'timer-danger':t<=20?'timer-warn':'';
+  if(inactive)inactive.className='';
+}
 function setSt(id,msg){const el=document.getElementById(id);if(el)el.textContent=msg}
 let _tt;function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast on '+type;clearTimeout(_tt);_tt=setTimeout(()=>el.className='toast',3200)}
 document.getElementById('authov').addEventListener('click',function(e){if(e.target===this)closeAuth()});
