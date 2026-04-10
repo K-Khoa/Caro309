@@ -331,7 +331,7 @@ class Rooms:
             "size": size, "turn": "X", "status": "waiting",
             "winner": None, "moves": 0, "created": time.time(),
             "creator": creator, "chat": [], "rematch": set(),
-            "timer_x": 60, "timer_o": 60, "turn_start": None,
+            "turn_start": None,
         }
         return rid
 
@@ -489,23 +489,20 @@ async def _timer_task(rid: str):
             await asyncio.sleep(1)
             continue
         elapsed = time.time() - room["turn_start"]
+        remain = round(max(0, 60 - elapsed))
         turn = room["turn"]
-        rem_x = round(max(0, room["timer_x"] - (elapsed if turn == "X" else 0)))
-        rem_o = round(max(0, room["timer_o"] - (elapsed if turn == "O" else 0)))
-        if (turn == "X" and rem_x <= 0) or (turn == "O" and rem_o <= 0):
+        if remain <= 0:
             room["status"] = "ended"
             room["winner"] = "O" if turn == "X" else "X"
-            room["timer_x"] = rem_x
-            room["timer_o"] = rem_o
             elo_result = _elo_update(room, room["winner"])
             timeout_msg = {"type": "timeout", "loser": turn, "winner": room["winner"],
-                          "timer_x": rem_x, "timer_o": rem_o}
+                          "timer": 0}
             if elo_result:
                 timeout_msg["elo_x"] = elo_result.get("elo_x")
                 timeout_msg["elo_o"] = elo_result.get("elo_o")
             await rooms.broadcast(rid, timeout_msg)
             break
-        await rooms.broadcast(rid, {"type": "tick", "turn": turn, "timer_x": rem_x, "timer_o": rem_o})
+        await rooms.broadcast(rid, {"type": "tick", "turn": turn, "timer": remain})
         await asyncio.sleep(1)
 
 # ── WebSocket ────────────────────────────────────────────────────
@@ -535,7 +532,7 @@ async def ws_endpoint(ws: WebSocket, rid: str, token: str = ""):
             "type": "game_start",
             "players": {k: v["username"] for k, v in room["players"].items()},
             "board": room["board"], "size": room["size"], "turn": "X",
-            "timer_x": 60, "timer_o": 60,
+            "timer": 60,
         })
         asyncio.ensure_future(_timer_task(rid))
     else:
@@ -585,20 +582,13 @@ async def ws_endpoint(ws: WebSocket, rid: str, token: str = ""):
                     room["status"] = "ended"
                     room["winner"] = role
                     elo_result = _elo_update(room, role)
-                if room["turn_start"]:
-                    elapsed = time.time() - room["turn_start"]
-                    if role == "X":
-                        room["timer_x"] = max(0, room["timer_x"] - elapsed)
-                    else:
-                        room["timer_o"] = max(0, room["timer_o"] - elapsed)
+                # Reset timer: mỗi nước đi mới = 60s mới
                 room["turn_start"] = time.time()
                 broadcast_msg = {
                     "type": "move", "player": role, "row": r2, "col": c2,
                     "board": room["board"], "turn": next_turn,
                     "winner": room["winner"], "status": room["status"],
-                    "moves": room["moves"],
-                    "timer_x": round(room["timer_x"]),
-                    "timer_o": round(room["timer_o"]),
+                    "moves": room["moves"], "timer": 60,
                 }
                 if elo_result:
                     broadcast_msg["elo_x"] = elo_result.get("elo_x")
@@ -624,13 +614,12 @@ async def ws_endpoint(ws: WebSocket, rid: str, token: str = ""):
                     room["turn"] = "X"; room["status"] = "playing"
                     room["winner"] = None; room["moves"] = 0
                     room["rematch"] = set()
-                    room["timer_x"] = 60; room["timer_o"] = 60
                     room["turn_start"] = time.time()
                     await rooms.broadcast(rid, {
                         "type": "game_start",
                         "players": {k: v["username"] for k, v in room["players"].items()},
                         "board": room["board"], "size": room["size"], "turn": "X",
-                        "timer_x": 60, "timer_o": 60,
+                        "timer": 60,
                     })
                     asyncio.ensure_future(_timer_task(rid))
     except WebSocketDisconnect:
