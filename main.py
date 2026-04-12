@@ -55,8 +55,6 @@ def init_db():
 
 init_db()
 
-# ── Auth helpers ─────────────────────────────────────────────────
-
 def _b64(b: bytes) -> str:
     return base64.urlsafe_b64encode(b).rstrip(b"=").decode()
 
@@ -85,8 +83,6 @@ def get_user(creds: HTTPAuthorizationCredentials = Depends(bearer)):
         raise HTTPException(401, "Token không hợp lệ")
     return p
 
-# ── Password ─────────────────────────────────────────────────────
-
 def hash_pw(pw: str) -> str:
     salt = b"caro309_fixed_salt_v1"
     return hashlib.pbkdf2_hmac("sha256", pw.encode(), salt, 100_000).hex()
@@ -102,11 +98,9 @@ def verify_pw(pw: str, stored_hash: str) -> bool:
         hashlib.sha256((pw + SECRET).encode()).hexdigest(),
         hashlib.pbkdf2_hmac("sha256", pw.encode(), SECRET.encode(), 100_000).hex(),
         hashlib.md5(pw.encode()).hexdigest(),
-        pw,  # plaintext
+        pw,  
     ]
     return stored_hash in checks
-
-# ── Auth endpoints ───────────────────────────────────────────────
 
 class AuthIn(BaseModel):
     username: str
@@ -193,8 +187,6 @@ def debug_check_hash(username: str):
     h = row["password"]
     return {"hash_length": len(h), "hash_prefix": h[:16], "hash_suffix": h[-8:]}
 
-# ── Leaderboard ──────────────────────────────────────────────────
-
 @app.get("/leaderboard")
 def leaderboard():
     db = get_db()
@@ -218,8 +210,6 @@ def leaderboard():
             d["joined"] = "—"
         result.append(d)
     return result
-
-# ── AI Game ──────────────────────────────────────────────────────
 
 class NewGame(BaseModel):
     size: int = 20
@@ -316,8 +306,6 @@ def do_move(body: MoveIn):
         "ai_move":    [ar, ac],
         "candidates": [[r2, c2] for r2, c2 in cands],
     }
-
-# ── Online Rooms ─────────────────────────────────────────────────
 
 class Rooms:
     def __init__(self):
@@ -477,8 +465,6 @@ def get_room(rid: str):
         raise HTTPException(404, "Phòng không tồn tại")
     return rooms.info(rid)
 
-# ── Timer Task ───────────────────────────────────────────────────
-
 async def _timer_task(rid: str):
     await asyncio.sleep(1)
     while True:
@@ -504,8 +490,6 @@ async def _timer_task(rid: str):
             break
         await rooms.broadcast(rid, {"type": "tick", "turn": turn, "timer": remain})
         await asyncio.sleep(1)
-
-# ── WebSocket ────────────────────────────────────────────────────
 
 @app.websocket("/ws/{rid}")
 async def ws_endpoint(ws: WebSocket, rid: str, token: str = ""):
@@ -582,7 +566,6 @@ async def ws_endpoint(ws: WebSocket, rid: str, token: str = ""):
                     room["status"] = "ended"
                     room["winner"] = role
                     elo_result = _elo_update(room, role)
-                # Reset timer: mỗi nước đi mới = 60s mới
                 room["turn_start"] = time.time()
                 broadcast_msg = {
                     "type": "move", "player": role, "row": r2, "col": c2,
