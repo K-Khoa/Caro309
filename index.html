@@ -2,8 +2,20 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <title>Caro309 — Cờ Caro</title>
+
+<!-- PWA -->
+<link rel="manifest" href="/manifest.json"/>
+<meta name="theme-color" content="#2d5be3"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="Caro309"/>
+<link rel="apple-touch-icon" href="/icon-192.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png"/>
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png"/>
+
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 
@@ -23,7 +35,8 @@
   --shadow-glow:0 0 60px rgba(45,91,227,.12);
 }
 html{scroll-behavior:smooth}
-body{background:var(--bg);color:var(--t1);font-family:'Instrument Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+body{background:var(--bg);color:var(--t1);font-family:'Instrument Sans',sans-serif;min-height:100vh;overflow-x:hidden;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--t4);border-radius:3px}
@@ -689,6 +702,13 @@ function setSt(id,msg){const el=document.getElementById(id);if(el)el.textContent
 let _tt;function toast(msg,type=''){const el=document.getElementById('toast');el.textContent=msg;el.className='toast on '+type;clearTimeout(_tt);_tt=setTimeout(()=>el.className='toast',3200)}
 document.getElementById('authov').addEventListener('click',function(e){if(e.target===this)closeAuth()});
 renderUser();go('home');
+
+// PWA: đăng ký service worker
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('/sw.js').catch(err=>console.log('SW register failed:',err));
+  });
+}
 </script>
 </body>
 </html>
