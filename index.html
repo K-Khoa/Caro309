@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
 <title>Caro309 — Cờ Caro</title>
 
-<!-- PWA -->
 <link rel="manifest" href="/manifest.json"/>
 <meta name="theme-color" content="#2d5be3"/>
 <meta name="mobile-web-app-capable" content="yes"/>
@@ -41,9 +40,6 @@ body{background:var(--bg);color:var(--t1);font-family:'Instrument Sans',sans-ser
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--t4);border-radius:3px}
 
-/* ═══════════════════════════
-   ANIMATED BACKGROUND
-═══════════════════════════ */
 .bg-orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;animation:orbFloat 20s ease-in-out infinite}
 .orb-1{width:500px;height:500px;background:radial-gradient(circle,rgba(45,91,227,.4),transparent 70%);top:-10%;left:-5%;animation-delay:0s}
@@ -56,7 +52,6 @@ body{background:var(--bg);color:var(--t1);font-family:'Instrument Sans',sans-ser
   75%{transform:translate(40px,20px) scale(1.08)}
 }
 
-/* Grid texture */
 body::before{
   content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:
@@ -65,9 +60,6 @@ body::before{
   background-size:48px 48px;
 }
 
-/* ═══════════════════════════
-   NAV
-═══════════════════════════ */
 nav{
   position:sticky;top:0;z-index:200;height:58px;
   background:rgba(240,239,233,.75);backdrop-filter:blur(24px) saturate(1.4);
@@ -94,16 +86,10 @@ nav{
   display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff}
 .uelo{font-size:11px;color:var(--amber);font-family:'JetBrains Mono',monospace;font-weight:600}
 
-/* ═══════════════════════════
-   PAGES
-═══════════════════════════ */
 .pg{display:none;position:relative;z-index:1}
 .pg.on{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
-/* ═══════════════════════════
-   HOME — Hero + Feature Cards
-═══════════════════════════ */
 #pg-home{display:none;flex-direction:column;align-items:center;padding:72px 20px 80px}
 #pg-home.on{display:flex}
 .hero{text-align:center;max-width:600px;margin-bottom:52px}
@@ -150,9 +136,6 @@ nav{
 .fc:nth-child(3){animation:fi .5s ease .44s both}
 .fc:nth-child(4){animation:fi .5s ease .52s both}
 
-/* ═══════════════════════════
-   GAME SHARED
-═══════════════════════════ */
 .gw{max-width:1000px;margin:0 auto;padding:14px 16px}
 .gtop{
   display:flex;align-items:center;gap:8px;flex-wrap:wrap;
@@ -208,7 +191,6 @@ canvas{display:block;cursor:crosshair}
 .stbar{margin-top:10px;padding:9px 14px;background:var(--glass);backdrop-filter:blur(10px);
   border:1px solid var(--glass-bd);border-radius:10px;font-size:13px;color:var(--t2);text-align:center}
 
-/* Win overlay */
 .wov{display:none;position:absolute;inset:0;border-radius:12px;
   background:rgba(255,255,254,.88);backdrop-filter:blur(10px);
   flex-direction:column;align-items:center;
@@ -217,9 +199,6 @@ canvas{display:block;cursor:crosshair}
 .wem{font-size:48px}.wtx{font-family:'Sora',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.5px;color:var(--t1)}
 .wsb{font-size:13px;color:var(--t2)}
 
-/* ═══════════════════════════
-   ONLINE LOBBY
-═══════════════════════════ */
 .pi{max-width:800px;margin:0 auto;padding:20px 16px}
 .ptit{font-family:'Sora',sans-serif;font-size:24px;font-weight:800;letter-spacing:-.5px;margin-bottom:4px}
 .psub{font-size:13px;color:var(--t3);margin-bottom:18px}
@@ -245,9 +224,6 @@ select.inp{cursor:pointer}
   background:rgba(24,149,91,.08);color:var(--green)}
 .bdg.fu{background:rgba(217,59,59,.08);color:var(--red)}
 
-/* ═══════════════════════════
-   ONLINE ROOM
-═══════════════════════════ */
 .rl{display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap}
 .rside{width:210px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
 .pcard{display:flex;align-items:center;gap:9px;background:var(--glass);backdrop-filter:blur(10px);
@@ -275,9 +251,6 @@ select.inp{cursor:pointer}
   cursor:pointer;font-family:'Instrument Sans',sans-serif;transition:all .15s;display:none}
 .rbtn2.on{display:block}.rbtn2:hover{border-color:var(--green);color:var(--green)}
 
-/* ═══════════════════════════
-   LEADERBOARD
-═══════════════════════════ */
 table{width:100%;border-collapse:collapse}
 th{padding:9px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--t3);
   text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--bd2);font-family:'Sora',sans-serif}
@@ -287,9 +260,6 @@ tr:hover td{background:rgba(45,91,227,.02)}
 .rk.g{color:var(--gold)}.rk.s{color:#8a8d9c}.rk.b{color:#a06830}
 .ev{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--acc)}
 
-/* ═══════════════════════════
-   AUTH MODAL
-═══════════════════════════ */
 .ov{display:none;position:fixed;inset:0;z-index:500;background:rgba(19,22,32,.3);
   backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:16px}
 .ov.on{display:flex}
@@ -314,7 +284,6 @@ tr:hover td{background:rgba(45,91,227,.02)}
 .mb:hover{background:var(--acc2);transform:translateY(-1px)}
 .merr{font-size:12px;color:var(--red);min-height:16px;margin-top:7px}
 
-/* TOAST */
 .timer-warn{color:var(--amber) !important;animation:blink .8s infinite}
 .timer-danger{color:var(--red) !important;animation:blink .4s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
@@ -337,14 +306,12 @@ tr:hover td{background:rgba(45,91,227,.02)}
 </head>
 <body>
 
-<!-- Animated background orbs -->
 <div class="bg-orbs">
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
 </div>
 
-<!-- NAV -->
 <nav>
   <div class="logo" onclick="go('home')">CARO<em>309</em></div>
   <div class="nav-r">
@@ -356,7 +323,6 @@ tr:hover td{background:rgba(45,91,227,.02)}
   </div>
 </nav>
 
-<!-- HOME -->
 <section class="pg" id="pg-home">
   <div class="hero">
     <h1>CARO<br/><em>309</em></h1>
@@ -374,7 +340,6 @@ tr:hover td{background:rgba(45,91,227,.02)}
   </div>
 </section>
 
-<!-- VS AI -->
 <section class="pg" id="pg-ai">
   <div class="gw">
     <div class="gtop">
@@ -419,7 +384,6 @@ tr:hover td{background:rgba(45,91,227,.02)}
   </div>
 </section>
 
-<!-- LOCAL 2P -->
 <section class="pg" id="pg-local">
   <div class="gw">
     <div class="gtop">
@@ -448,7 +412,6 @@ tr:hover td{background:rgba(45,91,227,.02)}
   </div>
 </section>
 
-<!-- ONLINE LOBBY -->
 <section class="pg" id="pg-online">
   <div class="pi">
     <div class="ptit">Chơi Online</div>
@@ -471,7 +434,6 @@ tr:hover td{background:rgba(45,91,227,.02)}
   </div>
 </section>
 
-<!-- ONLINE ROOM -->
 <section class="pg" id="pg-room">
   <div class="pi" style="max-width:1000px">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
@@ -499,7 +461,6 @@ tr:hover td{background:rgba(45,91,227,.02)}
   </div>
 </section>
 
-<!-- LEADERBOARD -->
 <section class="pg" id="pg-lb">
   <div class="pi">
     <div class="ptit">🏆 Bảng Xếp Hạng</div>
@@ -511,7 +472,6 @@ tr:hover td{background:rgba(45,91,227,.02)}
   </div>
 </section>
 
-<!-- AUTH -->
 <div class="ov" id="authov">
   <div class="modal">
     <button class="mcl" onclick="closeAuth()">✕</button>
@@ -540,7 +500,6 @@ let SZ=34;
 function cellSz(n){return n<=20?30:n<=25?26:22}
 const CL={ca:'#ddd8c8',cb:'#d4cfbe',grid:'#c2bca8',dot:'#a8a28e',xfill:'#c4d3f0',xstr:'#2d5be3',ofill:'#f0c4c4',ostr:'#d93b3b',cfill:'rgba(192,123,8,.1)',cstr:'#c07b08',last:'rgba(192,123,8,.5)',shadow:'rgba(0,0,0,.08)'};
 
-// Card click handlers
 document.querySelectorAll('.fgrid .fc').forEach((fc,i)=>{
   fc.addEventListener('click',()=>{['ai','local','online','lb'][i]&&go(['ai','local','online','lb'][i])});
 });
@@ -692,7 +651,6 @@ function updateTimer(t,turn){
   const ex=document.getElementById('timer-x'),eo=document.getElementById('timer-o');
   if(ex)ex.textContent=turn==='X'?t:'';
   if(eo)eo.textContent=turn==='O'?t:'';
-  // Warning colors on active player timer
   const active=turn==='X'?ex:eo;
   const inactive=turn==='X'?eo:ex;
   if(active)active.className=t<=10?'timer-danger':t<=20?'timer-warn':'';
@@ -703,7 +661,6 @@ let _tt;function toast(msg,type=''){const el=document.getElementById('toast');el
 document.getElementById('authov').addEventListener('click',function(e){if(e.target===this)closeAuth()});
 renderUser();go('home');
 
-// PWA: đăng ký service worker
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
     navigator.serviceWorker.register('/sw.js').catch(err=>console.log('SW register failed:',err));
