@@ -6,14 +6,12 @@ BEAM_WIDTH = 15
 DIRECTIONS = [(1,0),(0,1),(1,1),(1,-1)]
 
 PATTERNS = {
-    (5,0): 0,          # 5 quân bị chặn 2 đầu = 0 (luật chặn trong)
+    (5,0): 0,         
     (5,1): 10_000_000, (5,2): 10_000_000,
     (4,2): 500_000,    (4,1): 50_000,
     (3,2): 10_000,     (3,1): 1_000,
     (2,2): 500,        (2,1): 100,
 }
-
-# ── Helpers ──────────────────────────────────────────────────────
 
 def _line_score(r: int, c: int, dr: int, dc: int, player: str) -> int:
     count, open_ends = 1, 0
@@ -133,9 +131,6 @@ def _minimax(depth: int, maximizing: bool, alpha: float, beta: float) -> tuple[f
                 break
         return best, best_move
 
-
-# ── Public API ───────────────────────────────────────────────────
-
 def ai_move(level: str) -> tuple[int,int]:
     """Trả về (row, col) tốt nhất cho máy (O) theo level."""
     win = _immediate_win("O")
@@ -154,6 +149,6 @@ def ai_move(level: str) -> tuple[int,int]:
     elif level == "Medium":
         _, move = _minimax(4, True, -math.inf, math.inf)
         return move or cands[0]
-    else:  # Hard
+    else:  
         _, move = _minimax(5, True, -math.inf, math.inf)
         return move or cands[0]
